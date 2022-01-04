@@ -101,11 +101,6 @@ namespace AppLurker.ViewModels
             this.ShowFlyout("Settings", IoC.Get<SettingsViewModel>(), Position.Right);
         }
 
-        public void OnStatusBarClick()
-        {
-            SetCurrentView(new StatusbarDetailsViewModel());
-        }
-
         public void SetCurrentView(PropertyChangedBase viewModel)
         {
             CurrentView = viewModel;

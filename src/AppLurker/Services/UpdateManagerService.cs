@@ -13,7 +13,7 @@ namespace AppLurker.Services
         {
             #region Fields
 
-            private static readonly string PoeLukerGithubUrl = "https://github.com/C1rdec/Poe-Lurker";
+            private static readonly string GithubUrl = "";
 
             #endregion
 
@@ -39,7 +39,7 @@ namespace AppLurker.Services
             /// <returns>The task awaiter.</returns>
             public async Task Update()
             {
-                using (var updateManager = await Squirrel.UpdateManager.GitHubUpdateManager(PoeLukerGithubUrl))
+                using (var updateManager = await Squirrel.UpdateManager.GitHubUpdateManager(GithubUrl))
                 {
                     await updateManager.UpdateApp();
                     Squirrel.UpdateManager.RestartApp();
@@ -59,7 +59,7 @@ namespace AppLurker.Services
 #pragma warning disable CS0162
                 try
                 {
-                    using (var updateManager = await Squirrel.UpdateManager.GitHubUpdateManager(PoeLukerGithubUrl))
+                    using (var updateManager = await Squirrel.UpdateManager.GitHubUpdateManager(GithubUrl))
                     {
                         var information = await updateManager.CheckForUpdate();
                         return information.ReleasesToApply.Any();
