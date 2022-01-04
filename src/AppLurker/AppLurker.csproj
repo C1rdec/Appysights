@@ -5,7 +5,16 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <UserSecretsId>db3bcfbf-205b-4839-a27c-56bf80462b28</UserSecretsId>
+    <ApplicationIcon>Ressources\AppLurker.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Ressources\AppLurker.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Ressources\AppLurker.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
@@ -39,6 +48,10 @@
 
   <ItemGroup>
     <Folder Include="Svg\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Ressources\AppLurker.ico" />
   </ItemGroup>
 
 </Project>
