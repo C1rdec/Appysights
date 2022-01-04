@@ -56,15 +56,23 @@ namespace AppLurker.Services
 
         #region Methods
 
-        public void Save()
+        public void Save() => Save(Entity);
+
+        public void Save(string jsonValue) => Save(Deserialize<TEntity>(jsonValue));
+
+        public void Save(TEntity entity)
         {
-            var jsonValue = JsonSerializer.Serialize(Entity, new JsonSerializerOptions { WriteIndented = true });
+            var jsonValue = JsonSerializer.Serialize(entity, new JsonSerializerOptions { WriteIndented = true });
             File.WriteAllText(FilePath, jsonValue);
+
+            Entity = entity;
         }
 
-        protected T Deserialize<T>()
+        protected T Deserialize<T>() => Deserialize<T>(File.ReadAllText(this.FilePath));
+
+        protected T Deserialize<T>(string json)
         {
-            return JsonSerializer.Deserialize<T>(File.ReadAllText(this.FilePath));
+            return JsonSerializer.Deserialize<T>(json);
         }
 
         #endregion

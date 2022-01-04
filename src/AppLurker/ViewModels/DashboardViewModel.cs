@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AppLurker.Enums;
@@ -7,6 +9,7 @@ using AppLurker.Models;
 using AppLurker.Services;
 using Caliburn.Micro;
 using MahApps.Metro.Controls;
+using Microsoft.Win32;
 
 namespace AppLurker.ViewModels
 {
@@ -55,9 +58,49 @@ namespace AppLurker.ViewModels
 
         public StatusbarViewModel Statusbar { get; set; }
 
+        public bool HasConfiguration
+        {
+            get
+            {
+                var configuration = _configurationService.Entity;
+                return configuration.Services.Any() || configuration.Footer != null;
+            }
+        }
+
+        public bool HasNoConfiguration => !HasConfiguration;
+
         #endregion
 
         #region Methods
+
+        public void ImportConfiguration()
+        {
+            var dialog = new OpenFileDialog()
+            {
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                Filter = "Lurk files (*.lurk)|*.lurk",
+            };
+
+            try
+            {
+                var result = dialog.ShowDialog();
+                if (result.HasValue && result.Value)
+                {
+                    var text = System.IO.File.ReadAllText(dialog.FileName);
+                    _configurationService.Save(text);
+
+                    InitializeServices();
+                    InitializeFooter();
+
+                    NotifyOfPropertyChange(() => HasConfiguration);
+                    NotifyOfPropertyChange(() => HasNoConfiguration);
+                }
+            }
+            catch
+            {
+                // Notify the user
+            }
+        }
 
         public void Clear()
         {
@@ -123,6 +166,8 @@ namespace AppLurker.ViewModels
 
                 micro.Watch();
             }
+
+            NotifyOfPropertyChange(() => MicroServices);
         }
 
         private void InitializeFooter()

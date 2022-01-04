@@ -19,12 +19,6 @@ namespace AppLurker.Services
 
             #region Constructors
 
-            /// <summary>
-            /// Initializes a new instance of the <see cref="UpdateManager" /> class.
-            /// </summary>
-            /// <param name="settingsService">The settings service.</param>
-            /// <param name="clipboardLurker">The clipboard lurker.</param>
-            /// <param name="clientLurker">The client lurker.</param>
             public UpdateManager()
             {
             }
