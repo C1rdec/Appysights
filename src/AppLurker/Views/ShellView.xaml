@@ -1,0 +1,51 @@
+﻿<Controls:MetroWindow x:Class="AppLurker.Views.ShellView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+        mc:Ignorable="d"
+        xmlns:cal="http://www.caliburnproject.org"
+        MinHeight="500"
+        xmlns:local="clr-namespace:AppLurker"
+        MinWidth="800"
+        Title="App Lurker" Height="450" Width="800">
+    <Controls:MetroWindow.RightWindowCommands>
+        <Controls:WindowCommands>
+            <Button Cursor="Hand" cal:Message.Attach="[Event Click] = [Action ChangeTheme]">
+                <StackPanel Orientation="Horizontal">
+                    <local:IconPack Foreground="White"
+                                HorizontalAlignment="Center"
+                                Width="20"
+                                Visibility="{Binding IsException, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                Data="{x:Static local:IconPackData.Settings}"/>
+                    <TextBlock VerticalAlignment="Center" Margin="4,0,0,0">Settings</TextBlock>
+                </StackPanel>
+            </Button>
+        </Controls:WindowCommands>
+    </Controls:MetroWindow.RightWindowCommands>
+    <Controls:MetroWindow.Flyouts>
+        <Controls:FlyoutsControl>
+            <Controls:Flyout Header="{Binding FlyoutHeader}"
+                             IsOpen="{Binding FlyoutOpen}" 
+                             Position="{Binding FlyoutPosition}"
+                             Width="{Binding ActualWidth, ElementName=FlyoutWidth}">
+                <ContentControl cal:View.Model="{Binding Path=FlyoutContent,Mode=OneWay}"/>
+            </Controls:Flyout>
+        </Controls:FlyoutsControl>
+    </Controls:MetroWindow.Flyouts>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Button BorderThickness="0" x:Name="CloseFlyout" IsCancel="true" Width="0" Height="0"/>
+        
+        <!--This Grid is to set the Flyout Width-->
+        <Grid x:Name="FlyoutWidth"/>
+        <ContentControl x:Name="CurrentView" Grid.ColumnSpan="2" Margin="0,5,0,0"/>
+    </Grid>
+</Controls:MetroWindow>
