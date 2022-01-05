@@ -170,6 +170,10 @@ namespace AppLurker.ViewModels
         public void OnStatusBarClick()
         {
             _flyoutService.Close();
+            if (_selectedMicro != null)
+            {
+                _selectedMicro.Selected = false;
+            }
 
             var configuration = new MicroServiceConfiguration();
             configuration.Applications.Add(_configurationService.Entity.Footer);
