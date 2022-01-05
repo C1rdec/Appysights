@@ -14,7 +14,7 @@ namespace AppLurker.ViewModels
         private AppInsightsService _service;
         private Position _position;
         private int _pageIndex = 0;
-        private int _pageSize = 10;
+        private int _pageSize = 20;
         private readonly object pageLock = new object();
 
         #endregion
