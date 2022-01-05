@@ -60,6 +60,8 @@ namespace AppLurker.Services
 
         public event EventHandler<AppInsightEvent> NewEvent;
 
+        public event EventHandler Cleared;
+
         #endregion
 
         #region Methods
@@ -150,6 +152,7 @@ namespace AppLurker.Services
         public void Clear()
         {
             _events.Clear();
+            Cleared?.Invoke(this, EventArgs.Empty);
         }
 
         private void NewEventAction(AppInsightEvent appInsightEvent)

@@ -22,8 +22,7 @@
         </Border.Style>
         <Grid Margin="5">
             <Grid.RowDefinitions>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
+                <RowDefinition Height="auto"></RowDefinition>
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
             <TextBlock x:Name="Name" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18" FontWeight="Medium">
@@ -37,8 +36,14 @@
                     </Style>
                 </TextBlock.Style>
             </TextBlock>
-
-            <Grid Grid.Row="1">
+            <ItemsControl x:Name="Applications" Grid.Row="1" VerticalAlignment="Center">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+            <!--<Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
@@ -93,7 +98,7 @@
                         </Style>
                     </TextBlock.Style>
                 </TextBlock>
-            </Grid>
+            </Grid>-->
         </Grid>
     </Border>
 </UserControl>

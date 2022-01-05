@@ -5,12 +5,19 @@ namespace AppLurker.ViewModels
 {
     public class StatusbarViewModel: PropertyChangedBase
     {
-        private FooterService _service;
+        #region Fields
+
+        private StatusBatService _service;
         private System.Action _onClick;
+        private bool _selected;
         private bool _hasExceptions;
         private bool _notInitialize = true;
 
-        public StatusbarViewModel(FooterService service, System.Action onClick)
+        #endregion
+
+        #region Constructors
+
+        public StatusbarViewModel(StatusBatService service, System.Action onClick)
         {
             _onClick = onClick;
             _service = service;
@@ -19,6 +26,24 @@ namespace AppLurker.ViewModels
                 NotInitialize = false;
                 _hasExceptions = service.HasException;
             });
+        }
+
+        #endregion
+
+        #region Properties
+
+        public bool Selected
+        {
+            get
+            {
+                return _selected;
+            }
+
+            set
+            {
+                _selected = value;
+                NotifyOfPropertyChange(() => Selected);
+            }
         }
 
         public string StatusbarName => _service.Name;
@@ -51,9 +76,16 @@ namespace AppLurker.ViewModels
             }
         }
 
+        #endregion
+
+        #region Methods
+
         public void OnClick()
         {
+            Selected = true;
             _onClick?.Invoke();
         }
+
+        #endregion
     }
 }

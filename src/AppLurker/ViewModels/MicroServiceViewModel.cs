@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using Caliburn.Micro;
-using AppLurker.Models;
 using AppLurker.Services;
+using Caliburn.Micro;
 
 namespace AppLurker.ViewModels
 {
@@ -10,10 +10,10 @@ namespace AppLurker.ViewModels
     {
         #region Fields
 
+        private bool _selected;
+        private bool _hasEvents;
         private MicroService _service;
         private Action<MicroServiceViewModel> _callback;
-        private bool _selected;
-        private DebounceService _debounceService;
 
 
         #endregion
@@ -24,11 +24,25 @@ namespace AppLurker.ViewModels
         {
             _callback = callback;
             _service = microService;
-            _debounceService = new DebounceService();
             Name = microService.Name;
 
-            microService.Dev.NewEvent += NewEvent;
-            microService.Prod.NewEvent += NewEvent;
+            var viewModels = new List<SimpleAppInsightsViewModel>();
+            foreach (var application in microService.Applications)
+            {
+                var viewModel = new SimpleAppInsightsViewModel(application);
+                viewModel.PropertyChanged += this.ViewModel_PropertyChanged;
+                viewModels.Add(viewModel);
+            }
+
+            Applications = viewModels;
+        }
+
+        private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "ErrorCountValue")
+            {
+                this.HasEvents = Applications.Any(a => a.ErrorCount > 0);
+            }
         }
 
         #endregion
@@ -37,15 +51,7 @@ namespace AppLurker.ViewModels
 
         public string Name { get; set; }
 
-        public int DevErrorCount => _service.Dev.Events.Count();
-
-        public int ProdErrorCount => _service.Prod.Events.Count();
-
-        public string DevDisplayValue => DevErrorCount == 0 ? "-" : DevErrorCount.ToString();
-
-        public string ProdDisplayValue => ProdErrorCount == 0 ? "-" : ProdErrorCount.ToString();
-
-        public bool HasEvents => DevErrorCount != 0 || ProdErrorCount != 0;
+        public IEnumerable<SimpleAppInsightsViewModel> Applications { get; set; }
 
         public MicroService Service => _service;
 
@@ -63,18 +69,37 @@ namespace AppLurker.ViewModels
             }
         }
 
+        public bool HasEvents
+        {
+            get
+            {
+                return _hasEvents;
+            }
+
+            set
+            {
+                _hasEvents = value;
+                NotifyOfPropertyChange(() => HasEvents);
+            }
+        }
+
         #endregion
 
         #region Methods
+
+        public void GetLastHour()
+        {
+            _service.GetLastHour();
+        }
 
         public void GetLastDay()
         {
             _service.GetLastDay();
         }
 
-        public void GetLastHour()
+        public void Clear()
         {
-            _service.GetLastHour();
+            _service.Clear();
         }
 
         public void OnClick()
@@ -82,35 +107,13 @@ namespace AppLurker.ViewModels
             _callback(this);
         }
 
-        public void Clear()
-        {
-            _service.Clear();
-
-            NotifyChange();
-        }
-
-        private void NewEvent(object sender, AppInsightEvent e)
-        {
-            // We need a debounce since the event is raised for every exceptions.
-            _debounceService.Debounce(800, () => 
-            {
-                NotifyChange(); 
-            });
-        }
-
-        private void NotifyChange()
-        {
-            NotifyOfPropertyChange(() => DevDisplayValue);
-            NotifyOfPropertyChange(() => ProdDisplayValue);
-            NotifyOfPropertyChange(() => DevErrorCount);
-            NotifyOfPropertyChange(() => ProdErrorCount);
-            NotifyOfPropertyChange(() => HasEvents);
-        }
-
         public void Dispose()
         {
-            _service.Dev.NewEvent -= NewEvent;
-            _service.Prod.NewEvent -= NewEvent;
+            foreach (var application in Applications)
+            {
+                application.PropertyChanged -= this.ViewModel_PropertyChanged;
+                application.Dispose();
+            }
         }
 
         #endregion

@@ -1,4 +1,7 @@
-﻿using AppLurker.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using AppLurker.Models;
 
 namespace AppLurker.Services
 {
@@ -7,8 +10,6 @@ namespace AppLurker.Services
         #region Fields
 
         private string _name;
-        private AppInsightsService _devService;
-        private AppInsightsService _prodSerivce;
 
         #endregion
 
@@ -17,8 +18,7 @@ namespace AppLurker.Services
         public MicroService(MicroServiceConfiguration configuration)
         {
             _name = configuration.Name;
-            _devService = new AppInsightsService(configuration.Dev);
-            _prodSerivce = new AppInsightsService(configuration.Prod);
+            Applications = new List<AppInsightsService>(configuration.Applications.Take(3).Select(a => new AppInsightsService(a)));
         }
 
         #endregion
@@ -27,42 +27,28 @@ namespace AppLurker.Services
 
         public string Name => _name;
 
-        public AppInsightsService Prod => _prodSerivce;
-
-        public AppInsightsService Dev => _devService;
+        public IEnumerable<AppInsightsService> Applications { get; init; }
 
         #endregion
 
         #region Methods
 
-        public void Watch()
-        {
-            _devService.Watch();
-            _prodSerivce.Watch();
-        }
+        public void Watch() => ForeachApplication((a) => a.Watch());
 
-        public void Stop()
-        {
-            _devService.Stop();
-            _prodSerivce.Stop();
-        }
+        public void Stop() => ForeachApplication((a) => a.Stop());
 
-        public void Clear()
-        {
-            _devService.Clear();
-            _prodSerivce.Clear();
-        }
+        public void Clear() => ForeachApplication((a) => a.Clear());
 
-        public void GetLastDay()
-        {
-            _devService.GetLastDay();
-            _prodSerivce.GetLastDay();
-        }
+        public void GetLastDay() => ForeachApplication((a) => a.GetLastDay());
 
-        public void GetLastHour()
+        public void GetLastHour() => ForeachApplication((a) => a.GetLastHour());
+
+        public void ForeachApplication(Action<AppInsightsService> callback)
         {
-            _devService.GetLastHour();
-            _prodSerivce.GetLastHour();
+            foreach (var application in Applications)
+            {
+                callback(application);
+            }
         }
 
         #endregion

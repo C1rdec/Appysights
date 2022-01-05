@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text.Json;
+using Microsoft.Win32;
 
 namespace AppLurker.Services
 {
@@ -66,6 +67,29 @@ namespace AppLurker.Services
             File.WriteAllText(FilePath, jsonValue);
 
             Entity = entity;
+        }
+
+        public void Import(Action onSuccess)
+        {
+            var dialog = new OpenFileDialog()
+            {
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                Filter = "Lurk files (*.lurk)|*.lurk",
+            };
+
+            try
+            {
+                var result = dialog.ShowDialog();
+                if (result.HasValue && result.Value)
+                {
+                    var text = File.ReadAllText(dialog.FileName);
+                    Save(text);
+                    onSuccess();
+                }
+            }
+            catch
+            {
+            }
         }
 
         protected T Deserialize<T>() => Deserialize<T>(File.ReadAllText(this.FilePath));

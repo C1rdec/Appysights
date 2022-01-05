@@ -5,7 +5,7 @@ using AppLurker.Models;
 
 namespace AppLurker.Services
 {
-    public class FooterService
+    public class StatusBatService
     {
         #region Fields
 
@@ -15,7 +15,7 @@ namespace AppLurker.Services
 
         #endregion
 
-        public FooterService(AppInsightsService appInsightsService)
+        public StatusBatService(AppInsightsService appInsightsService)
         {
             _exceptions = new List<ExceptionEvent>();
             _appInsightsService = appInsightsService;

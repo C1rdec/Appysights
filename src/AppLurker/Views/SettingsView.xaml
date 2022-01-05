@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:cal="http://www.caliburnproject.org"
              xmlns:local="clr-namespace:AppLurker"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -21,5 +22,12 @@
                             Width="50"
                             Data="{x:Static local:IconPackData.Party}"/>
         </Button>
+        <TextBlock HorizontalAlignment="Right" 
+                   cal:Message.Attach="[Event MouseDown] = [Action ChangeConfig()]"
+                   VerticalAlignment="Bottom" 
+                   Cursor="Hand"
+                   Foreground="{DynamicResource MahApps.Brushes.Accent}" 
+                   Grid.Row="2"
+                   Margin="0,0,0,10">Change Config</TextBlock>
     </Grid>
 </UserControl>

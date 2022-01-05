@@ -1,9 +1,9 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
-using AppLurker.Enums;
 using AppLurker.Models;
 using AppLurker.Services;
+using MahApps.Metro.Controls;
 
 namespace AppLurker.ViewModels
 {
@@ -12,7 +12,7 @@ namespace AppLurker.ViewModels
         #region Fields
 
         private AppInsightsService _service;
-        private EnvironmentType _type;
+        private Position _position;
         private int _pageIndex = 0;
         private int _pageSize = 10;
         private readonly object pageLock = new object();
@@ -21,9 +21,9 @@ namespace AppLurker.ViewModels
 
         #region Constructors
 
-        public AppInsightsViewModel(AppInsightsService service, EnvironmentType type)
+        public AppInsightsViewModel(AppInsightsService service, Position position)
         {
-            _type = type;
+            _position = position;
             _service = service;
             _service.NewEvent += Service_NewEvent;
             Events = new ObservableCollection<EventTileViewModel>();
@@ -37,7 +37,7 @@ namespace AppLurker.ViewModels
 
         public ObservableCollection<EventTileViewModel> Events { get; set; }
 
-        public string Type => _type.ToString();
+        public string ServiceName => _service.Name;
 
         #endregion
 
@@ -71,7 +71,7 @@ namespace AppLurker.ViewModels
 
         private void Service_NewEvent(object sender, AppInsightEvent e)
         {
-            Events.Add(new EventTileViewModel(e, _type));
+            Events.Add(new EventTileViewModel(e, _position));
         }
 
         private void DisplayNextPage()
@@ -84,7 +84,7 @@ namespace AppLurker.ViewModels
             var eventToDisplay = _service.Events.Skip(_pageIndex * _pageSize).Take(_pageSize);
             foreach (var appInsightEvent in eventToDisplay)
             {
-                Events.Add(new EventTileViewModel(appInsightEvent, _type));
+                Events.Add(new EventTileViewModel(appInsightEvent, _position));
             }
 
             _pageIndex++;

@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using AppLurker.Enums;
 using AppLurker.Models;
 using AppLurker.Services;
 using Caliburn.Micro;
-using MahApps.Metro.Controls;
-using Microsoft.Win32;
 
 namespace AppLurker.ViewModels
 {
-    public class DashboardViewModel : PropertyChangedBase, IHandle<DashboardMessage>
+    public class DashboardViewModel : PropertyChangedBase, IHandle<DashboardMessage>, IHandle<ConfigChangedMessage>
     {
         #region Fields
 
@@ -35,8 +31,7 @@ namespace AppLurker.ViewModels
             _flyoutService.FlyoutClosed += FlyoutService_FlyoutClosed;
             eventAggregator.SubscribeOnPublishedThread(this);
 
-            InitializeServices();
-            InitializeFooter();
+            Initialize();
         }
 
         private void FlyoutService_FlyoutClosed(object sender, System.EventArgs e)
@@ -75,31 +70,10 @@ namespace AppLurker.ViewModels
 
         public void ImportConfiguration()
         {
-            var dialog = new OpenFileDialog()
+            _configurationService.Import(() => 
             {
-                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                Filter = "Lurk files (*.lurk)|*.lurk",
-            };
-
-            try
-            {
-                var result = dialog.ShowDialog();
-                if (result.HasValue && result.Value)
-                {
-                    var text = System.IO.File.ReadAllText(dialog.FileName);
-                    _configurationService.Save(text);
-
-                    InitializeServices();
-                    InitializeFooter();
-
-                    NotifyOfPropertyChange(() => HasConfiguration);
-                    NotifyOfPropertyChange(() => HasNoConfiguration);
-                }
-            }
-            catch
-            {
-                // Notify the user
-            }
+                Initialize();
+            });
         }
 
         public void Clear()
@@ -112,16 +86,6 @@ namespace AppLurker.ViewModels
             }
         }
 
-        public void GetLastDay()
-        {
-            ClearSelection();
-            foreach (var micro in MicroServices)
-            {
-                micro.Clear();
-                micro.GetLastDay();
-            }
-        }
-
         public void GetLastHour()
         {
             ClearSelection();
@@ -129,6 +93,16 @@ namespace AppLurker.ViewModels
             {
                 micro.Clear();
                 micro.GetLastHour();
+            }
+        }
+
+        public void GetLastDay()
+        {
+            ClearSelection();
+            foreach (var micro in MicroServices)
+            {
+                micro.Clear();
+                micro.GetLastDay();
             }
         }
 
@@ -147,11 +121,19 @@ namespace AppLurker.ViewModels
             else if (message.AppInsightEvent != null)
             {
                 var header = message.AppInsightEvent.GetLocalDate();
-                var position = message.Type == EnvironmentType.Dev ? Position.Left : Position.Right;
-                _flyoutService.Show(header, new EventViewModel(message.AppInsightEvent), position);
+                _flyoutService.Show(header, new EventViewModel(message.AppInsightEvent), message.Position);
             }
 
             return Task.CompletedTask;
+        }
+
+        private void Initialize()
+        {
+            InitializeServices();
+            InitializeStatusbar();
+
+            NotifyOfPropertyChange(() => HasConfiguration);
+            NotifyOfPropertyChange(() => HasNoConfiguration);
         }
 
         private void InitializeServices()
@@ -170,20 +152,28 @@ namespace AppLurker.ViewModels
             NotifyOfPropertyChange(() => MicroServices);
         }
 
-        private void InitializeFooter()
+        private void InitializeStatusbar()
         {
             var footerConfiguration = _configurationService.Entity.Footer;
             if (footerConfiguration == null)
             {
-                return;
+                Statusbar = null;
+            }
+            else
+            {
+                Statusbar = new StatusbarViewModel(new StatusBatService(new AppInsightsService(footerConfiguration)), OnStatusBarClick);
             }
 
-            Statusbar = new StatusbarViewModel(new FooterService(new AppInsightsService(footerConfiguration)), OnStatusBarClick);
             this.NotifyOfPropertyChange(() => Statusbar);
         }
 
         public void OnStatusBarClick()
         {
+            _flyoutService.Close();
+
+            var configuration = new MicroServiceConfiguration();
+            configuration.Applications.Add(_configurationService.Entity.Footer);
+            HandleMicroService(new MicroService(configuration));
         }
 
         private void OnMicroServiceClick(MicroServiceViewModel viewModel)
@@ -193,6 +183,11 @@ namespace AppLurker.ViewModels
             {
                 ClearSelection();
                 return;
+            }
+
+            if (Statusbar != null)
+            {
+                Statusbar.Selected = false;
             }
 
             if (_selectedMicro != null)
@@ -207,10 +202,17 @@ namespace AppLurker.ViewModels
 
         private void ClearSelection()
         {
+            _flyoutService.Close();
+
             if (_selectedMicro != null)
             {
                 _selectedMicro.Selected = false;
                 _selectedMicro = null;
+            }
+
+            if (Statusbar != null)
+            {
+                Statusbar.Selected = false;
             }
 
             SelectedMicroService = null;
@@ -223,6 +225,12 @@ namespace AppLurker.ViewModels
 
             SelectedMicroService = new MicroServiceDetailsViewModel(microService);
             NotifyOfPropertyChange(() => SelectedMicroService);
+        }
+
+        public Task HandleAsync(ConfigChangedMessage message, CancellationToken cancellationToken)
+        {
+            Initialize();
+            return Task.CompletedTask;
         }
 
         #endregion

@@ -1,6 +1,6 @@
 ﻿using System;
-using AppLurker.Enums;
 using AppLurker.Services;
+using MahApps.Metro.Controls;
 
 namespace AppLurker.Models
 {
@@ -11,7 +11,7 @@ namespace AppLurker.Models
             CloseCallback = closeCallback;
         }
 
-        public EnvironmentType Type { get; set; }
+        public Position Position { get; set; }
 
         public MicroService MicroService { get; set; }
 

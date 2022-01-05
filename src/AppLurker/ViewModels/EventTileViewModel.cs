@@ -1,20 +1,20 @@
 ﻿using System.Linq;
-using Caliburn.Micro;
-using AppLurker.Enums;
 using AppLurker.Models;
+using Caliburn.Micro;
+using MahApps.Metro.Controls;
 
 namespace AppLurker.ViewModels
 {
     public class EventTileViewModel : EventViewModelBase
     {
-        private EnvironmentType _type;
+        private Position _position;
         private string _environment;
         private bool _selected;
 
-        public EventTileViewModel(AppInsightEvent appEvent, EnvironmentType type)
+        public EventTileViewModel(AppInsightEvent appEvent, Position position)
             : base(appEvent)
         {
-            _type = type;
+            _position = position;
             if (appEvent.Cloud != null)
             {
                 _environment = appEvent.Cloud.RoleName.Split("-").Last().ToUpper();
@@ -47,7 +47,7 @@ namespace AppLurker.ViewModels
             Selected = true;
             IoC.Get<IEventAggregator>().PublishOnUIThreadAsync(new DashboardMessage(Close)
             {
-                Type = _type,
+                Position = _position,
                 AppInsightEvent = AppEvent
             });
         }
