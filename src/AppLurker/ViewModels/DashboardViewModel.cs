@@ -18,15 +18,17 @@ namespace AppLurker.ViewModels
         private DashboardMessage _lastMessage;
         private FlyoutService _flyoutService;
         private ConfigurationService _configurationService;
+        private KeyboardService _keyboardService;
 
         #endregion
 
         #region Constructors
 
-        public DashboardViewModel(ConfigurationService configurationService, IEventAggregator eventAggregator, FlyoutService flyoutService)
+        public DashboardViewModel(ConfigurationService configurationService, IEventAggregator eventAggregator, FlyoutService flyoutService, KeyboardService keyboardService)
         {
             _configurationService = configurationService;
             _flyoutService = flyoutService;
+            _keyboardService = keyboardService;
             _services = new List<MicroService>();
             _flyoutService.FlyoutClosed += FlyoutService_FlyoutClosed;
             eventAggregator.SubscribeOnPublishedThread(this);
@@ -34,14 +36,6 @@ namespace AppLurker.ViewModels
             Initialize();
         }
 
-        private void FlyoutService_FlyoutClosed(object sender, System.EventArgs e)
-        {
-            if (_lastMessage != null)
-            {
-                _lastMessage.CloseCallback?.Invoke();
-                _lastMessage = null;
-            }
-        }
 
         #endregion
 
@@ -127,13 +121,72 @@ namespace AppLurker.ViewModels
             return Task.CompletedTask;
         }
 
+        private void KeyboardService_LeftPressed(object sender, System.EventArgs e)
+        {
+            var index = MicroServices.IndexOf(_selectedMicro);
+            var previous = MicroServices.Take(index).Reverse().FirstOrDefault(m => m.HasEvents);
+            if (previous != null)
+            {
+                OnMicroServiceClick(previous);
+            }
+        }
+
+        private void KeyboardService_RightPressed(object sender, System.EventArgs e)
+        {
+            if (_selectedMicro == null)
+            {
+                var first = MicroServices.FirstOrDefault(m => m.HasEvents);
+                if (first != null)
+                {
+                    OnMicroServiceClick(first);
+                }
+            }
+            else
+            {
+                var index = MicroServices.IndexOf(_selectedMicro);
+                var next = MicroServices.Skip(index + 1).FirstOrDefault(m => m.HasEvents);
+                if (next != null)
+                {
+                    OnMicroServiceClick(next);
+                }
+            }
+        }
+
+        private void FlyoutService_FlyoutClosed(object sender, System.EventArgs e)
+        {
+            if (_lastMessage != null)
+            {
+                _lastMessage.CloseCallback?.Invoke();
+                _lastMessage = null;
+            }
+        }
+
         private void Initialize()
         {
+            InitializeKeyboard();
             InitializeServices();
             InitializeStatusbar();
 
             NotifyOfPropertyChange(() => HasConfiguration);
             NotifyOfPropertyChange(() => HasNoConfiguration);
+        }
+
+        private void InitializeKeyboard()
+        {
+            _keyboardService.LeftPressed += this.KeyboardService_LeftPressed;
+            _keyboardService.RightPressed += this.KeyboardService_RightPressed;
+            _keyboardService.OnePressed += this.KeyboardService_OnePressed;
+            _keyboardService.TwoPressed += this._keyboardService_TwoPressed; ;
+        }
+
+        private void _keyboardService_TwoPressed(object sender, System.EventArgs e)
+        {
+            Execute.OnUIThread(() => GetLastDay());
+        }
+
+        private void KeyboardService_OnePressed(object sender, System.EventArgs e)
+        {
+            Execute.OnUIThread(() => GetLastHour());
         }
 
         private void InitializeServices()

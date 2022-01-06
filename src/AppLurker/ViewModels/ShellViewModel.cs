@@ -3,6 +3,8 @@ using Caliburn.Micro;
 using MahApps.Metro.Controls;
 using AppLurker.Models;
 using AppLurker.Services;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace AppLurker.ViewModels
 {
@@ -13,10 +15,12 @@ namespace AppLurker.ViewModels
         private Position _flyoutPosition;
         private PropertyChangedBase _flyoutContent;
         private FlyoutService _flyoutService;
+        private KeyboardService _keyboardService;
 
-        public ShellViewModel(DashboardViewModel dashboard, FlyoutService flyoutService, ThemeService themeService)
+        public ShellViewModel(DashboardViewModel dashboard, FlyoutService flyoutService, ThemeService themeService, KeyboardService keyboardService)
         {
             _flyoutService = flyoutService;
+            _keyboardService = keyboardService;
 
             _flyoutService.ShowFlyoutRequested += FlyoutService_ShowFlyout;
             _flyoutService.CloseFlyoutRequested += FlyoutService_CloseFlyout;
@@ -95,6 +99,11 @@ namespace AppLurker.ViewModels
         #endregion
 
         #region Methods
+        protected override async void OnViewLoaded(object view)
+        {
+            await Task.Delay(200);
+            await _keyboardService.InstallAsync();
+        }
 
         public void ChangeTheme()
         {
@@ -105,14 +114,6 @@ namespace AppLurker.ViewModels
         {
             CurrentView = viewModel;
             NotifyOfPropertyChange(() => CurrentView);
-        }
-
-        private void KeyboardService_RightPressed(object sender, EventArgs e)
-        {
-        }
-
-        private void KeyboardService_LeftPressed(object sender, EventArgs e)
-        {
         }
 
         public void CloseFlyout()
