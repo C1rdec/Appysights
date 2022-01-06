@@ -44,17 +44,22 @@ namespace AppLurker.ViewModels
                 return;
             }
 
+            Select();
+        }
+
+        public void Close()
+        {
+            Selected = false;
+        }
+
+        public void Select()
+        {
             Selected = true;
             IoC.Get<IEventAggregator>().PublishOnUIThreadAsync(new DashboardMessage(Close)
             {
                 Position = _position,
                 AppInsightEvent = AppEvent
             });
-        }
-
-        public void Close()
-        {
-            Selected = false;
         }
     }
 }

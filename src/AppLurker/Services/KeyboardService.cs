@@ -54,8 +54,8 @@ namespace AppLurker.Services
             _hook.AddHandler(KeyCode.W, (o, e) => UpPressed?.Invoke(this, EventArgs.Empty));
 
             // Down
-            _hook.AddHandler(KeyCode.Down, (o, e) => UpPressed?.Invoke(this, EventArgs.Empty));
-            _hook.AddHandler(KeyCode.S, (o, e) => UpPressed?.Invoke(this, EventArgs.Empty));
+            _hook.AddHandler(KeyCode.Down, (o, e) => DownPressed?.Invoke(this, EventArgs.Empty));
+            _hook.AddHandler(KeyCode.S, (o, e) => DownPressed?.Invoke(this, EventArgs.Empty));
 
             _hook.AddHandler(KeyCode.Tab, (o, e) => NextTabPressed?.Invoke(this, EventArgs.Empty));
             _hook.AddHandler(KeyCode.Tab, Modifiers.Shift,(o, e) => PreviousTabPressed?.Invoke(this, EventArgs.Empty));

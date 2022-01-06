@@ -39,6 +39,8 @@ namespace AppLurker.ViewModels
 
         public string ServiceName => _service.Name;
 
+        public bool Selected => Events.Any(e => e.Selected);
+
         #endregion
 
         #region Methods
@@ -67,6 +69,46 @@ namespace AppLurker.ViewModels
         public void Dispose()
         {
             _service.NewEvent -= Service_NewEvent;
+        }
+
+        public void Next()
+        {
+            var selectedEvent = Events.FirstOrDefault(e => e.Selected);
+            if (selectedEvent == null)
+            {
+                var first = Events.FirstOrDefault();
+                if (first != null)
+                {
+                    first.Select();
+                }
+            }
+            else
+            {
+                var index = Events.IndexOf(selectedEvent);
+                if (index == -1 || index + 1 >= Events.Count)
+                {
+                    return;
+                }
+
+                Events[index + 1].Select();
+            }
+        }
+
+        public void Previous()
+        {
+            var selectedEvent = Events.FirstOrDefault(e => e.Selected);
+            if (selectedEvent == null)
+            {
+                return;
+            }
+
+            var index = Events.IndexOf(selectedEvent);
+            if (index == -1 || index - 1 < 0)
+            {
+                return;
+            }
+
+            Events[index - 1].Select();
         }
 
         private void Service_NewEvent(object sender, AppInsightEvent e)

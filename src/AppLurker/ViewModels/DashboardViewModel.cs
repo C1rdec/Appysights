@@ -272,6 +272,7 @@ namespace AppLurker.ViewModels
                 Statusbar.Selected = false;
             }
 
+            SelectedMicroService?.Dispose();
             SelectedMicroService = null;
             NotifyOfPropertyChange(() => SelectedMicroService);
         }
@@ -280,7 +281,7 @@ namespace AppLurker.ViewModels
         {
             SelectedMicroService?.Dispose();
 
-            SelectedMicroService = new MicroServiceDetailsViewModel(microService);
+            SelectedMicroService = new MicroServiceDetailsViewModel(microService, _keyboardService);
             NotifyOfPropertyChange(() => SelectedMicroService);
         }
 
