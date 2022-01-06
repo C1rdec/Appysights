@@ -6,7 +6,7 @@ using Caliburn.Micro;
 
 namespace AppLurker.ViewModels
 {
-    public abstract class EventViewModelBase : PropertyChangedBase
+    public abstract class EventViewModelBase : Screen
     {
         private static readonly Regex VersionRegex = new Regex("v[0-9]");
 

@@ -9,7 +9,7 @@ namespace AppLurker.Views
     {
         public EventTileView()
         {
-            InitializeComponent();
+            InitializeComponent();        
         }
     }
 }

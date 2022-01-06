@@ -1,11 +1,12 @@
 ﻿using System.Linq;
 using AppLurker.Models;
+using AppLurker.Views;
 using Caliburn.Micro;
 using MahApps.Metro.Controls;
 
 namespace AppLurker.ViewModels
 {
-    public class EventTileViewModel : EventViewModelBase
+    public class EventTileViewModel : EventViewModelBase, IViewAware
     {
         private Position _position;
         private string _environment;
@@ -55,6 +56,13 @@ namespace AppLurker.ViewModels
         public void Select()
         {
             Selected = true;
+
+            Execute.OnUIThread(() => 
+            {
+                var view = GetView() as EventTileView;
+                view.MainBorder.BringIntoView();
+            });
+
             IoC.Get<IEventAggregator>().PublishOnUIThreadAsync(new DashboardMessage(Close)
             {
                 Position = _position,
