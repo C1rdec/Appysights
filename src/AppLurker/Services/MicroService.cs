@@ -39,7 +39,7 @@ namespace AppLurker.Services
 
         public void Clear() => ForeachApplication((a) => a.Clear());
 
-        public void GetLastDay() => ForeachApplication((a) => a.GetLastDay());
+        public void GetLast24Hour() => ForeachApplication((a) => a.GetLast24Hour());
 
         public void GetLastHour() => ForeachApplication((a) => a.GetLastHour());
 

@@ -92,9 +92,9 @@ namespace AppLurker.ViewModels
             _service.GetLastHour();
         }
 
-        public void GetLastDay()
+        public void GetLast24Hour()
         {
-            _service.GetLastDay();
+            _service.GetLast24Hour();
         }
 
         public void Clear()

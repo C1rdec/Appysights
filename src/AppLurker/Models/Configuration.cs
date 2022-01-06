@@ -17,7 +17,7 @@ namespace AppLurker.Models
 
         public IEnumerable<MicroServiceConfiguration> Services { get; set; }
 
-        public AppInsightsConfiguration Footer { get; set; }
+        public AppInsightsConfiguration Statusbar { get; set; }
 
         #endregion
     }

@@ -18,7 +18,15 @@ namespace AppLurker.ViewModels
             _position = position;
             if (appEvent.Cloud != null)
             {
-                _environment = appEvent.Cloud.RoleName.Split("-").Last().ToUpper();
+                var items = appEvent.Cloud.RoleName.Split("-");
+                if (items.Length > 2)
+                {
+                    _environment = appEvent.Cloud.RoleName.Split("-").Last().ToUpper();
+                }
+                else
+                {
+                    _environment = appEvent.Cloud.RoleName.ToUpper();
+                }
             }
         }
 

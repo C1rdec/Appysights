@@ -59,7 +59,7 @@
                                 Cursor="Hand" 
                                 BorderBrush="{DynamicResource MahApps.Brushes.Gray9}"
                                 VerticalAlignment="Top">1H</Button>
-                        <Button x:Name="GetLastDay" 
+                        <Button x:Name="GetLast24Hour" 
                                 Focusable="False"
                                 Grid.Row="1" 
                                 Grid.Column="1" 

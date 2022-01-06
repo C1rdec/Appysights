@@ -52,7 +52,7 @@ namespace AppLurker.ViewModels
             get
             {
                 var configuration = _configurationService.Entity;
-                return configuration.Services.Any() || configuration.Footer != null;
+                return configuration.Services.Any() || configuration.Statusbar != null;
             }
         }
 
@@ -90,13 +90,13 @@ namespace AppLurker.ViewModels
             }
         }
 
-        public void GetLastDay()
+        public void GetLast24Hour()
         {
             ClearSelection();
             foreach (var micro in MicroServices)
             {
                 micro.Clear();
-                micro.GetLastDay();
+                micro.GetLast24Hour();
             }
         }
 
@@ -181,7 +181,7 @@ namespace AppLurker.ViewModels
 
         private void _keyboardService_TwoPressed(object sender, System.EventArgs e)
         {
-            Execute.OnUIThread(() => GetLastDay());
+            Execute.OnUIThread(() => GetLast24Hour());
         }
 
         private void KeyboardService_OnePressed(object sender, System.EventArgs e)
@@ -207,7 +207,7 @@ namespace AppLurker.ViewModels
 
         private void InitializeStatusbar()
         {
-            var footerConfiguration = _configurationService.Entity.Footer;
+            var footerConfiguration = _configurationService.Entity.Statusbar;
             if (footerConfiguration == null)
             {
                 Statusbar = null;
@@ -229,8 +229,10 @@ namespace AppLurker.ViewModels
             }
 
             var configuration = new MicroServiceConfiguration();
-            configuration.Applications.Add(_configurationService.Entity.Footer);
-            HandleMicroService(new MicroService(configuration));
+            configuration.Applications.Add(_configurationService.Entity.Statusbar);
+            var service = new MicroService(configuration);
+            service.Watch();
+            HandleMicroService(service);
         }
 
         private void OnMicroServiceClick(MicroServiceViewModel viewModel)

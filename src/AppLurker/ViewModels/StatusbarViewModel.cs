@@ -24,7 +24,7 @@ namespace AppLurker.ViewModels
             service.InitializeAsync().ContinueWith(t =>
             {
                 NotInitialize = false;
-                _hasExceptions = service.HasException;
+                HasExceptions = service.HasException;
             });
         }
 

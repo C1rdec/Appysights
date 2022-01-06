@@ -135,7 +135,7 @@ namespace AppLurker.Services
             return events.Where(e => e.Timestamp.ToLocalTime().Day == DateTime.Now.Day).OrderBy(e => e.Timestamp);
         }
 
-        public void GetLastDay()
+        public void GetLast24Hour()
         {
             Clear();
             Stop();
