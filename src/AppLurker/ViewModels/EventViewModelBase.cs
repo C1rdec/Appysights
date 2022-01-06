@@ -73,7 +73,7 @@ namespace AppLurker.ViewModels
             var paths = value.Split(separator).ToList();
             var versionIndex = paths.FindIndex(s => VersionRegex.Match(s.ToLower()).Success);
             var elementToTaKe = paths.Count - versionIndex;
-            return string.Join(separator, paths.Skip(Math.Max(0, paths.Count() - elementToTaKe)));
+            return string.Join(separator, paths.Skip(Math.Max(0, paths.Count - elementToTaKe)));
         }
     }
 }

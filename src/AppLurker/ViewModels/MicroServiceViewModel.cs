@@ -24,7 +24,7 @@ namespace AppLurker.ViewModels
         {
             _callback = callback;
             _service = microService;
-            Name = microService.Name;
+            ServiceName = microService.Name;
 
             var viewModels = new List<SimpleAppInsightsViewModel>();
             foreach (var application in microService.Applications)
@@ -49,7 +49,7 @@ namespace AppLurker.ViewModels
 
         #region Properties
 
-        public string Name { get; set; }
+        public string ServiceName { get; set; }
 
         public IEnumerable<SimpleAppInsightsViewModel> Applications { get; set; }
 

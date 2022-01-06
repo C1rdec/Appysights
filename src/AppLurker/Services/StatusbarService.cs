@@ -5,7 +5,7 @@ using AppLurker.Models;
 
 namespace AppLurker.Services
 {
-    public class StatusBatService
+    public class StatusbarService
     {
         #region Fields
 
@@ -15,12 +15,14 @@ namespace AppLurker.Services
 
         #endregion
 
-        public StatusBatService(AppInsightsService appInsightsService)
+        public StatusbarService(AppInsightsService appInsightsService)
         {
             _exceptions = new List<ExceptionEvent>();
             _appInsightsService = appInsightsService;
             _initializeTask = InitializeCore();
         }
+
+        public AppInsightsService AppService => _appInsightsService;
 
         public string Name => _appInsightsService.Name;
 

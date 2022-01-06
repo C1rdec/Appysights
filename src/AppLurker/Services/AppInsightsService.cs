@@ -132,7 +132,13 @@ namespace AppLurker.Services
 
             using var exceptionPipeline = new EventPipeline<T>(GetUrl<T>(), (e) => events.Add(e), ApiKey);
             await exceptionPipeline.GetLastDay();
-            return events.Where(e => e.Timestamp.ToLocalTime().Day == DateTime.Now.Day).OrderBy(e => e.Timestamp);
+            var todayEvents = events.Where(e => e.Timestamp.ToLocalTime().Day == DateTime.Now.Day).OrderBy(e => e.Timestamp);
+            foreach (var todayEvent in todayEvents)
+            {
+                _events.Add(todayEvent);
+            }
+
+            return todayEvents;
         }
 
         public void GetLast24Hour()

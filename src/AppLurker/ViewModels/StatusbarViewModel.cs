@@ -7,7 +7,7 @@ namespace AppLurker.ViewModels
     {
         #region Fields
 
-        private StatusBatService _service;
+        private StatusbarService _service;
         private System.Action _onClick;
         private bool _selected;
         private bool _hasExceptions;
@@ -17,7 +17,7 @@ namespace AppLurker.ViewModels
 
         #region Constructors
 
-        public StatusbarViewModel(StatusBatService service, System.Action onClick)
+        public StatusbarViewModel(StatusbarService service, System.Action onClick)
         {
             _onClick = onClick;
             _service = service;

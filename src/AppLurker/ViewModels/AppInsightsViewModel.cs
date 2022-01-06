@@ -15,7 +15,7 @@ namespace AppLurker.ViewModels
         private Position _position;
         private int _pageIndex = 0;
         private int _pageSize = 20;
-        private readonly object pageLock = new object();
+        private readonly object pageLock = new();
 
         #endregion
 

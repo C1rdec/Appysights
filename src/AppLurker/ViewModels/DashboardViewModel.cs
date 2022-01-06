@@ -14,6 +14,7 @@ namespace AppLurker.ViewModels
         #region Fields
 
         private List<MicroService> _services;
+        private StatusbarService _statusbarService;
         private MicroServiceViewModel _selectedMicro;
         private DashboardMessage _lastMessage;
         private FlyoutService _flyoutService;
@@ -176,10 +177,10 @@ namespace AppLurker.ViewModels
             _keyboardService.LeftPressed += this.KeyboardService_LeftPressed;
             _keyboardService.RightPressed += this.KeyboardService_RightPressed;
             _keyboardService.OnePressed += this.KeyboardService_OnePressed;
-            _keyboardService.TwoPressed += this._keyboardService_TwoPressed; ;
+            _keyboardService.TwoPressed += this.KeyboardService_TwoPressed;
         }
 
-        private void _keyboardService_TwoPressed(object sender, System.EventArgs e)
+        private void KeyboardService_TwoPressed(object sender, System.EventArgs e)
         {
             Execute.OnUIThread(() => GetLast24Hour());
         }
@@ -207,14 +208,15 @@ namespace AppLurker.ViewModels
 
         private void InitializeStatusbar()
         {
-            var footerConfiguration = _configurationService.Entity.Statusbar;
-            if (footerConfiguration == null)
+            var statusbarConfiguration = _configurationService.Entity.Statusbar;
+            if (statusbarConfiguration == null)
             {
                 Statusbar = null;
             }
             else
             {
-                Statusbar = new StatusbarViewModel(new StatusBatService(new AppInsightsService(footerConfiguration)), OnStatusBarClick);
+                _statusbarService = new StatusbarService(new AppInsightsService(statusbarConfiguration));
+                Statusbar = new StatusbarViewModel(_statusbarService, OnStatusBarClick);
             }
 
             this.NotifyOfPropertyChange(() => Statusbar);
@@ -228,11 +230,7 @@ namespace AppLurker.ViewModels
                 _selectedMicro.Selected = false;
             }
 
-            var configuration = new MicroServiceConfiguration();
-            configuration.Applications.Add(_configurationService.Entity.Statusbar);
-            var service = new MicroService(configuration);
-            service.Watch();
-            HandleMicroService(service);
+            HandleMicroService(new MicroService(_statusbarService.AppService));
         }
 
         private void OnMicroServiceClick(MicroServiceViewModel viewModel)

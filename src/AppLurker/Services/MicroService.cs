@@ -21,6 +21,12 @@ namespace AppLurker.Services
             Applications = new List<AppInsightsService>(configuration.Applications.Take(3).Select(a => new AppInsightsService(a)));
         }
 
+        public MicroService(AppInsightsService appService)
+        {
+            _name = appService.Name;
+            Applications = new List<AppInsightsService>() { appService };
+        }
+
         #endregion
 
         #region Properties
