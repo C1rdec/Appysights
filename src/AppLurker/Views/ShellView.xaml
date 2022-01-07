@@ -14,7 +14,7 @@
         Title="App Lurker" Height="450" Width="800">
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>
-            <Button Cursor="Hand" cal:Message.Attach="[Event Click] = [Action ChangeTheme]">
+            <Button Cursor="Hand" cal:Message.Attach="[Event Click] = [Action ShowSettings]" Visibility="{Binding UpToDate, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <StackPanel Orientation="Horizontal">
                     <local:IconPack Foreground="White"
                                 HorizontalAlignment="Center"
@@ -23,6 +23,24 @@
                                 Data="{x:Static local:IconPackData.Settings}"/>
                     <TextBlock VerticalAlignment="Center" Margin="4,0,0,0">Settings</TextBlock>
                 </StackPanel>
+            </Button>
+            <Button Cursor="Hand" 
+                    cal:Message.Attach="[Event Click] = [Action UpdateApplication]" 
+                    Visibility="{Binding NeedUpdate, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <StackPanel Orientation="Horizontal">
+                    <local:IconPack Foreground="White"
+                                HorizontalAlignment="Center"
+                                    Margin="0,-4,0,0"
+                                Width="20"
+                                Visibility="{Binding IsException, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                Data="{x:Static local:IconPackData.Download}"/>
+                    <TextBlock VerticalAlignment="Center" Margin="8,0,0,0">Update</TextBlock>
+                </StackPanel>
+            </Button>
+            <Button Cursor="Hand">
+                <Button.Content>
+                    <TextBlock Text="{Binding Version}"/>
+                </Button.Content>
             </Button>
         </Controls:WindowCommands>
     </Controls:MetroWindow.RightWindowCommands>

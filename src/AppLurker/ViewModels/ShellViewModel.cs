@@ -1,24 +1,27 @@
 ﻿using System;
-using Caliburn.Micro;
-using MahApps.Metro.Controls;
+using System.Reflection;
+using System.Threading.Tasks;
 using AppLurker.Models;
 using AppLurker.Services;
-using System.Threading.Tasks;
-using System.Threading;
+using Caliburn.Micro;
+using MahApps.Metro.Controls;
 
 namespace AppLurker.ViewModels
 {
     public class ShellViewModel : Screen
     {
         private bool _flyoutOpen;
+        private bool _needUpdate;
         private string _flyoutHeader;
         private Position _flyoutPosition;
         private PropertyChangedBase _flyoutContent;
         private FlyoutService _flyoutService;
         private KeyboardService _keyboardService;
+        private UpdateManagerService _updateManagerService;
 
-        public ShellViewModel(DashboardViewModel dashboard, FlyoutService flyoutService, ThemeService themeService, KeyboardService keyboardService)
+        public ShellViewModel(DashboardViewModel dashboard, FlyoutService flyoutService, ThemeService themeService, KeyboardService keyboardService, UpdateManagerService updateManagerSerivce)
         {
+            _updateManagerService = updateManagerSerivce;
             _flyoutService = flyoutService;
             _keyboardService = keyboardService;
 
@@ -96,18 +99,59 @@ namespace AppLurker.ViewModels
             }
         }
 
+        public bool NeedUpdate 
+        {
+            get 
+            {
+                return _needUpdate;
+            } 
+
+            private set 
+            { 
+                _needUpdate = value;
+                NotifyOfPropertyChange();
+                NotifyOfPropertyChange(() => UpToDate);
+            } 
+        }
+
+        public bool UpToDate => !NeedUpdate;
+
         #endregion
 
         #region Methods
+
         protected override async void OnViewLoaded(object view)
         {
+            NeedUpdate = await _updateManagerService.CheckForUpdate();
             await Task.Delay(200);
             await _keyboardService.InstallAsync();
         }
 
-        public void ChangeTheme()
+        public void ShowSettings()
         {
             this.ShowFlyout("Settings", IoC.Get<SettingsViewModel>(), Position.Right);
+        }
+
+        public async void UpdateApplication()
+        {
+            var needUpdate = await _updateManagerService.CheckForUpdate();
+            if (needUpdate)
+            {
+                await _updateManagerService.Update();
+            }
+            else
+            {
+                needUpdate = false;
+            }
+        }
+
+        public string Version
+        {
+            get
+            {
+                var version = Assembly.GetExecutingAssembly().GetName().Version;
+                return $"{version.Major}.{version.Minor}.{version.Build}";
+            }
         }
 
         public void SetCurrentView(PropertyChangedBase viewModel)

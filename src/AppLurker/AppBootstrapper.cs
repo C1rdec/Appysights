@@ -11,6 +11,7 @@ namespace AppLurker
         #region Fields
 
         private SimpleContainer _container;
+        private UpdateManagerService _updateManager;
 
         #endregion
 
@@ -21,6 +22,8 @@ namespace AppLurker
         /// </summary>
         public AppBootstrapper()
         {
+            _updateManager = new UpdateManagerService();
+            _updateManager.HandleSquirrel();
             Initialize();
         }
 
@@ -55,6 +58,7 @@ namespace AppLurker
             _container.Singleton<IEventAggregator, EventAggregator>();
             _container.PerRequest<ShellViewModel, ShellViewModel>();
             _container.Instance(Application);
+            _container.Instance(_updateManager);
         }
 
         /// <summary>
