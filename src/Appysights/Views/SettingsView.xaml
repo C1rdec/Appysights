@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="Appysights.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:local="clr-namespace:Appysights"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Margin="10,0,10,0">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <ComboBox x:Name="Themes" Cursor="Hand" HorizontalContentAlignment="Center" FontSize="28"/>
+        <ComboBox x:Name="Schemes" Grid.Row="1" Margin="0,10,0,0" Cursor="Hand" HorizontalContentAlignment="Center" FontSize="28"/>
+        <Button x:Name="Random" Grid.Row="2" Margin="0,10,0,0" Style="{DynamicResource MahApps.Styles.Button.Circle}" Height="80" Width="80" Cursor="Hand">
+            <local:IconPack Foreground="White"
+                            HorizontalAlignment="Center"
+                            Margin="2,0,0,0"
+                            Width="50"
+                            Data="{x:Static local:IconPackData.Party}"/>
+        </Button>
+        <TextBlock HorizontalAlignment="Right" 
+                   cal:Message.Attach="[Event MouseDown] = [Action ChangeConfig()]"
+                   VerticalAlignment="Bottom" 
+                   Cursor="Hand"
+                   Foreground="{DynamicResource MahApps.Brushes.Accent}" 
+                   Grid.Row="2"
+                   Margin="0,0,0,10">Change Config</TextBlock>
+    </Grid>
+</UserControl>
