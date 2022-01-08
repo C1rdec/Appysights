@@ -6,27 +6,56 @@
              xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Border Cursor="Hand" cal:Message.Attach="[Event MouseDown] = [Action OnClick()]">
-        <Border.Style>
-            <Style TargetType="Border">
-                <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent4}"/>
-                <Setter Property="Opacity" Value="0.75"/>
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding HasExceptions}" Value="True">
-                        <Setter Property="Background" Value="#f44336"/>
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding Selected}" Value="True">
-                        <Setter Property="Background" Value="{DynamicResource Brushes.HighLight}"/>
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding NotInitialize}" Value="True">
-                        <Setter Property="Background" Value="Gray"/>
-                    </DataTrigger>
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Opacity" Value="1"></Setter>
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
-        </Border.Style>
-        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="StatusbarName"></TextBlock>
-    </Border>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        <Border Cursor="Hand" cal:Message.Attach="[Event MouseDown] = [Action OnClick()]">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent4}"/>
+                    <Setter Property="Opacity" Value="0.50"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding HasExceptionsSilenced}" Value="True">
+                            <Setter Property="Background" Value="#f44336"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Selected}" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource Brushes.HighLight}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding NotInitialize}" Value="True">
+                            <Setter Property="Background" Value="Gray"/>
+                        </DataTrigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Opacity" Value="0.75"></Setter>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+        </Border>
+        <Border Grid.Column="1" 
+                Width="15"
+                Cursor="Hand" 
+                cal:Message.Attach="[Event MouseDown] = [Action Silence()]" 
+                Visibility="{Binding HasExceptions, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent3}"/>
+                    <Setter Property="Opacity" Value="0.75"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding HasExceptionsSilenced}" Value="True">
+                            <Setter Property="Background" Value="#f44336"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding NotInitialize}" Value="True">
+                            <Setter Property="Background" Value="Gray"/>
+                        </DataTrigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Opacity" Value="1"></Setter>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+        </Border>
+        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="StatusbarName" Grid.ColumnSpan="2"/>
+    </Grid>
 </UserControl>

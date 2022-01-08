@@ -45,6 +45,8 @@ namespace Appysights.Services
 
         protected abstract string FileName { get; }
 
+        protected virtual string ImportFileExtension => ".txt";
+
         protected string FilePath => Path.Combine(FolderPath, FileName);
 
         protected string FolderPath => Path.Combine(AppDataFolderPath, FolderName);
@@ -74,7 +76,7 @@ namespace Appysights.Services
             var dialog = new OpenFileDialog()
             {
                 InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                Filter = "Lurk files (*.lurk)|*.lurk",
+                Filter = $"Files (*{ImportFileExtension})|*{ImportFileExtension}",
             };
 
             try

@@ -30,7 +30,7 @@
                 <StackPanel Orientation="Horizontal">
                     <local:IconPack Foreground="White"
                                 HorizontalAlignment="Center"
-                                    Margin="0,-4,0,0"
+                                    Margin="0,-6,0,0"
                                 Width="20"
                                 Visibility="{Binding IsException, Converter={StaticResource BooleanToVisibilityConverter}}"
                                 Data="{x:Static local:IconPackData.Download}"/>

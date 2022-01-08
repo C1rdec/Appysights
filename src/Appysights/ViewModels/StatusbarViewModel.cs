@@ -3,14 +3,14 @@ using Appysights.Services;
 
 namespace Appysights.ViewModels
 {
-    public class StatusbarViewModel: PropertyChangedBase
+    public class StatusbarViewModel : PropertyChangedBase
     {
         #region Fields
 
         private StatusbarService _service;
         private System.Action _onClick;
         private bool _selected;
-        private bool _hasExceptions;
+        private bool _silenced;
         private bool _notInitialize = true;
 
         #endregion
@@ -24,7 +24,7 @@ namespace Appysights.ViewModels
             service.InitializeAsync().ContinueWith(t =>
             {
                 NotInitialize = false;
-                HasExceptions = service.HasException;
+                NotifyOfPropertyChange(() => HasExceptions);
             });
         }
 
@@ -62,17 +62,18 @@ namespace Appysights.ViewModels
             }
         }
 
-        public bool HasExceptions
-        {
-            get 
-            { 
-                return _hasExceptions; 
-            }
+        public bool HasExceptions => _service.HasException;
 
-            set
+        public bool HasExceptionsSilenced
+        {
+            get
             {
-                _hasExceptions = value;
-                NotifyOfPropertyChange();
+                if (_silenced)
+                {
+                    return false;
+                }
+
+                return HasExceptions;
             }
         }
 
@@ -84,6 +85,13 @@ namespace Appysights.ViewModels
         {
             Selected = true;
             _onClick?.Invoke();
+        }
+
+        public void Silence()
+        {
+            _silenced = !_silenced;
+            NotifyOfPropertyChange(() => HasExceptions);
+            NotifyOfPropertyChange(() => HasExceptionsSilenced);
         }
 
         #endregion

@@ -15,14 +15,6 @@ namespace Appysights.Services
 
         #endregion
 
-        #region Constructors
-
-        public UpdateManagerService()
-        {
-        }
-
-        #endregion
-
         #region Methods
 
         /// <summary>
