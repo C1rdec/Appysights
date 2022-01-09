@@ -19,7 +19,7 @@
             </Style>
         </Border.Style>
         <Grid>
-            <Grid>
+            <Grid Margin="0,6,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition/>
@@ -56,7 +56,7 @@
                             </Style>
                         </TextBlock.Style>
                     </TextBlock>
-                    <TextBlock x:Name="DescriptionOverview" Grid.Row="1">
+                    <TextBlock x:Name="Description" Grid.Row="1">
                         <TextBlock.Style>
                             <Style TargetType="TextBlock">
                                 <Style.Triggers>
@@ -70,13 +70,24 @@
                 </Grid>
             </Grid>
             <Border Background="{DynamicResource Brushes.HighLight}" HorizontalAlignment="Right" VerticalAlignment="Top" CornerRadius="4" Margin="0,-4,-2,0">
-                <TextBlock x:Name="Environment"
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock x:Name="SimpleDateTime"
+                           Foreground="White"
+                           FontSize="12" 
+                               VerticalAlignment="Center"
+                           Grid.Column="1" 
+                           FontWeight="Bold" 
+                           Margin="4,0,4,2" 
+                           HorizontalAlignment="Center"/>
+                    <TextBlock x:Name="Environment"
                            Foreground="White"
                            FontSize="15" 
                            Grid.Column="1" 
                            FontWeight="Bold" 
                            Margin="4,0,4,2" 
                            HorizontalAlignment="Center"/>
+                </StackPanel>
+
             </Border>
         </Grid>
     </Border>

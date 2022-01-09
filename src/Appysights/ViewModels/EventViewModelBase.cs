@@ -18,7 +18,6 @@ namespace Appysights.ViewModels
             {
                 var request = requestEvent.Request;
                 Title = $"[{request.ResultCode}] {request.Name}";
-                DescriptionOverview = appEvent.GetSimpleLocalDate();
                 Description = requestEvent.Request.Url;
                 ActionName = $"Duration: {Math.Round(requestEvent.Request.Duration, 2)}s";
             }
@@ -28,15 +27,12 @@ namespace Appysights.ViewModels
                 Title = exception.Type;
 
                 var message = string.IsNullOrEmpty(exception.Message) ? exception.OuterMessage : exception.Message;
-                DescriptionOverview = message;
                 Description = message;
                 ActionName = FormatActionName(AppEvent.CustomDimensions);
             }
         }
 
         public string Title { get; set; }
-
-        public string DescriptionOverview { get; set; }
 
         public string Description { get; set; }
 
@@ -45,6 +41,8 @@ namespace Appysights.ViewModels
         public bool IsException => AppEvent is ExceptionEvent;
 
         public string DateTime => AppEvent.GetLocalDate();
+
+        public string SimpleDateTime => AppEvent.GetSimpleLocalDate();
 
         public string Id => AppEvent.Id.ToString();
 
