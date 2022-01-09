@@ -25,8 +25,9 @@
                 Style="{StaticResource MahApps.Styles.Button.Circle}">
             <Button.ContentTemplate>
                 <DataTemplate>
-                    <local:IconPack Foreground="White"
+                    <local:IconPack 
                                 HorizontalAlignment="Center"
+                                Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                                 Width="25"
                                 Visibility="{Binding RequestMode, Converter={StaticResource BooleanToVisibilityConverter}}"
                                 Data="{x:Static local:IconPackData.Refresh}"/>
@@ -51,7 +52,7 @@
             </Border.Style>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <TextBlock x:Name="ServiceName" FontSize="28" FontWeight="SemiBold" />
-                <local:IconPack Foreground="White"
+                <local:IconPack Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                                 Margin="10,4,0,0"
                                 HorizontalAlignment="Center"
                                 Width="18"

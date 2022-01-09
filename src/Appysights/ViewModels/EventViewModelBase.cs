@@ -19,7 +19,7 @@ namespace Appysights.ViewModels
                 var request = requestEvent.Request;
                 Title = $"[{request.ResultCode}] {request.Name}";
                 Description = request.Url;
-                ActionName = $"Duration: {Math.Round(requestEvent.Request.Duration, 2)} ms";
+                ActionName = $"Duration: {Math.Round(requestEvent.Request.Duration, 2)}s";
             }
             else if (appEvent is ExceptionEvent exceptionEvent)
             {
