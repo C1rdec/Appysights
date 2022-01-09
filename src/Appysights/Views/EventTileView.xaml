@@ -24,9 +24,12 @@
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <Image Source="/Resources/Request.png"
-                       Width="50"
-                       Visibility="{Binding IsRequest, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <local:IconPack Foreground="White"
+                                Margin="8"
+                                HorizontalAlignment="Center"
+                                Width="35"
+                                Visibility="{Binding IsRequest, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                Data="{x:Static local:IconPackData.Request}"/>
                 <local:IconPack Foreground="White"
                                 Margin="8"
                                 HorizontalAlignment="Center"
