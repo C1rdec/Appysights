@@ -9,9 +9,16 @@
                     <local:AppBootstrapper x:Key="bootstrapper" />
                     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
                 </ResourceDictionary>
+                
+                <!--Busy Indicator-->
+                <ResourceDictionary Source="pack://application:,,,/BusyIndicator;component/Theme/Default.xaml"/>
+                
+                <!--Mahapps-->
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Dark.Steel.xaml" />
+                
+                <!--IconPack-->
                 <ResourceDictionary>
                     <Style x:Key="PackIconStyle" TargetType="{x:Type local:IconPack}">
                         <Setter Property="Padding" Value="0" />
@@ -46,6 +53,7 @@
                         </Setter>
                     </Style>
                 </ResourceDictionary>
+                
                 <ResourceDictionary>
                     <Color x:Key="Colors.HighLight">#1565C0</Color>
                     <SolidColorBrush x:Key="Brushes.HighLight" Color="{StaticResource Colors.HighLight}" />

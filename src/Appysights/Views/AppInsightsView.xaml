@@ -5,8 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:cal="http://www.caliburnproject.org"
              xmlns:local="clr-namespace:Appysights"
+             xmlns:busy="https://github.com/Peoky/BusyIndicator"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="400">
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="IndicatorForeground" Color="{DynamicResource MahApps.Colors.Accent}" />
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>
@@ -60,15 +64,18 @@
                                 Data="{x:Static local:IconPackData.Request}"/>
             </StackPanel>
         </Border>
-        <ScrollViewer Grid.Row="1" cal:Message.Attach="[Event ScrollChanged] = [Action OnScroll($eventArgs)]">
-            <ItemsControl x:Name="Events">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel HorizontalAlignment="Center"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
-        </ScrollViewer>
+
+        <busy:BusyMask x:Name="BusyIndicator" Grid.Row="1" IsBusy="{Binding IsBusy}" IndicatorType="Piston" BusyContent=" " Background="Transparent" >
+            <ScrollViewer Grid.Row="1" cal:Message.Attach="[Event ScrollChanged] = [Action OnScroll($eventArgs)]">
+                <ItemsControl x:Name="Events">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel HorizontalAlignment="Center"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ScrollViewer>
+        </busy:BusyMask>
     </Grid>
     
 </UserControl>

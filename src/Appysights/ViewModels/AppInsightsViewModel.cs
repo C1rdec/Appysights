@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Appysights.Models;
 using Appysights.Services;
 using MahApps.Metro.Controls;
@@ -20,6 +21,7 @@ namespace Appysights.ViewModels
         private readonly object pageLock = new();
         private bool _listenScroll = true;
         private bool _requestMode;
+        private bool _isBusy;
 
         #endregion
 
@@ -46,6 +48,20 @@ namespace Appysights.ViewModels
 
         public bool Selected => Events.Any(e => e.Selected);
 
+        public bool IsBusy
+        {
+            get
+            {
+                return _isBusy;
+            }
+
+            set
+            {
+                _isBusy = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
         public bool RequestMode
         {
             get
@@ -70,7 +86,9 @@ namespace Appysights.ViewModels
             if (!RequestMode)
             {
                 RequestMode = true;
-                _currentEvents = await _service.GetLastHourFailedRequests();
+                IsBusy = true;
+                _currentEvents = await GetLastHourFailedRequests();
+                IsBusy = false;
             }
             else
             {
@@ -85,7 +103,7 @@ namespace Appysights.ViewModels
         public async void RefreshRequests()
         {
             Clear();
-            _currentEvents = await _service.GetLastHourFailedRequests();
+            _currentEvents = await GetLastHourFailedRequests();
             DisplayNextPage();
         }
 
@@ -161,6 +179,14 @@ namespace Appysights.ViewModels
             _service.NewEvent -= Service_NewEvent;
         }
 
+        private async Task<IEnumerable<RequestEvent>> GetLastHourFailedRequests()
+        {
+            IsBusy = true;
+            var requests = await _service.GetLastHourFailedRequests();
+            IsBusy = false;
+            return requests;
+        }
+
         private void Service_NewEvent(object sender, AppInsightEvent e)
         {
             Events.Add(new EventTileViewModel(e, _position));
@@ -188,7 +214,6 @@ namespace Appysights.ViewModels
             Events.Clear();
 
             _pageIndex = 0;
-            //NotifyOfPropertyChange(() => Events);
         }
 
         #endregion
