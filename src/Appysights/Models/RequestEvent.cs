@@ -1,12 +1,11 @@
-﻿using System;
-
-namespace Appysights.Models
+﻿namespace Appysights.Models
 {
     public class RequestEvent : AppInsightEvent
     {
-        /// <summary>
-        /// Gets or sets the request.
-        /// </summary>
+        #region Properties
+
         public AppRequest Request { get; set; }
+
+        #endregion
     }
 }

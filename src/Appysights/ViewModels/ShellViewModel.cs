@@ -10,6 +10,8 @@ namespace Appysights.ViewModels
 {
     public class ShellViewModel : Screen
     {
+        #region Fields
+
         private bool _flyoutOpen;
         private bool _needUpdate;
         private string _flyoutHeader;
@@ -19,6 +21,10 @@ namespace Appysights.ViewModels
         private KeyboardService _keyboardService;
         private UpdateManagerService _updateManagerService;
         private DialogService _dialogService;
+
+        #endregion
+
+        #region Constructors
 
         public ShellViewModel(
             DashboardViewModel dashboard, 
@@ -40,6 +46,8 @@ namespace Appysights.ViewModels
             CurrentView = dashboard;
             themeService.Apply();
         }
+
+        #endregion
 
         #region Properties
 
@@ -129,13 +137,6 @@ namespace Appysights.ViewModels
 
         #region Methods
 
-        protected override async void OnViewLoaded(object view)
-        {
-            NeedUpdate = await _updateManagerService.CheckForUpdate();
-            await Task.Delay(200);
-            await _keyboardService.InstallAsync();
-        }
-
         public void ShowSettings()
         {
             this.ShowFlyout("Settings", IoC.Get<SettingsViewModel>(), Position.Right);
@@ -155,18 +156,11 @@ namespace Appysights.ViewModels
             }
         }
 
-        public void SetCurrentView(PropertyChangedBase viewModel)
-        {
-            CurrentView = viewModel;
-            NotifyOfPropertyChange(() => CurrentView);
-        }
-
         public void CloseFlyout()
         {
             FlyoutOpen = false;
 
-            // We dont want to notify the UI
-            // since the content will disapear
+            // We use the field since we dont want to notify the UI
             _flyoutContent = null;
         }
 
@@ -178,6 +172,12 @@ namespace Appysights.ViewModels
             FlyoutOpen = true;
         }
 
+        protected override async void OnViewLoaded(object view)
+        {
+            NeedUpdate = await _updateManagerService.CheckForUpdate();
+            await Task.Delay(200);
+            await _keyboardService.InstallAsync();
+        }
         private void FlyoutService_ShowFlyout(object sender, FlyoutRequest e)
         {
             ShowFlyout(e.Header, e.Content, e.Position);

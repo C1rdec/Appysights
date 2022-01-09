@@ -7,12 +7,13 @@ namespace Appysights.Services
 {
     public class KeyboardService: IDisposable
     {
+        #region Fields
+
         private KeyboardHook _hook;
 
-        public KeyboardService()
-        {
+        #endregion
 
-        }
+        #region Events
 
         public event EventHandler OnePressed;
 
@@ -29,6 +30,10 @@ namespace Appysights.Services
         public event EventHandler NextTabPressed;
 
         public event EventHandler PreviousTabPressed;
+
+        #endregion
+
+        #region Methods
 
         public void Dispose()
         {
@@ -65,5 +70,7 @@ namespace Appysights.Services
 
             await _hook.InstallAsync();
         }
+
+        #endregion
     }
 }

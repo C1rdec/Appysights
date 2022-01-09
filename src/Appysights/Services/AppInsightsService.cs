@@ -74,7 +74,6 @@ namespace Appysights.Services
             }
 
             _watching = true;
-            //using var requestPipeline = new EventPipeline<RequestEvent>(FailedRequestUrl, NewFailedRequest, _apiKey);
             using var exceptionPipeline = new EventPipeline<ExceptionEvent>(ExceptionsUrl, NewEventAction, ApiKey);
 
             _tokenSource = new CancellationTokenSource();

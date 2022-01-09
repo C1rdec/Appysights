@@ -8,9 +8,15 @@ namespace Appysights.ViewModels
 {
     public class EventTileViewModel : EventViewModelBase, IViewAware
     {
+        #region Fields
+
         private Position _position;
         private string _environment;
         private bool _selected;
+
+        #endregion
+
+        #region Constructors
 
         public EventTileViewModel(AppInsightEvent appEvent, Position position)
             : base(appEvent)
@@ -30,6 +36,10 @@ namespace Appysights.ViewModels
             }
         }
 
+        #endregion
+
+        #region Properties
+
         public string Environment => _environment;
 
         public bool Selected
@@ -45,6 +55,10 @@ namespace Appysights.ViewModels
                 NotifyOfPropertyChange(() => Selected);
             }
         }
+
+        #endregion
+
+        #region Methods
 
         public void OnClick()
         {
@@ -78,5 +92,7 @@ namespace Appysights.ViewModels
                 AppInsightEvent = AppEvent
             });
         }
+
+        #endregion
     }
 }

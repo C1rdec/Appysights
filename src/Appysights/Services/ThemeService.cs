@@ -8,9 +8,15 @@ namespace Appysights.Services
 {
     public class ThemeService
     {
+        #region Fields
+
         private static Random _random = new();
         private Application _application;
         private SettingsService _settingsService;
+
+        #endregion
+
+        #region Constructors
 
         public ThemeService(Application application, SettingsService settingsService)
         {
@@ -18,9 +24,17 @@ namespace Appysights.Services
             _application = application;
         }
 
+        #endregion
+
+        #region Properties
+
         public Theme Theme => _settingsService.Theme;
 
         public Scheme Scheme => _settingsService.Scheme;
+
+        #endregion
+
+        #region Methods
 
         public IEnumerable<Scheme> GetSchemes() => GetEnumValues<Scheme>();
 
@@ -58,5 +72,7 @@ namespace Appysights.Services
         {
             return Enum.GetValues(typeof(T)).Cast<T>().ToArray().OrderBy(t => t);
         }
+
+        #endregion
     }
 }

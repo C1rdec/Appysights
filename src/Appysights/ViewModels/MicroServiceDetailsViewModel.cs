@@ -9,7 +9,13 @@ namespace Appysights.ViewModels
 {
     public class MicroServiceDetailsViewModel: PropertyChangedBase, IDisposable
     {
+        #region Fields
+
         private KeyboardService _keyboardService;
+
+        #endregion
+
+        #region Constructors
 
         public MicroServiceDetailsViewModel(MicroService microService, KeyboardService keyboardService)
         {
@@ -25,7 +31,15 @@ namespace Appysights.ViewModels
             InitializeKeyboard();
         }
 
+        #endregion
+
+        #region Properties
+
         public List<AppInsightsViewModel> Applications { get; init; }
+
+        #endregion
+
+        #region Methods
 
         public void InitializeKeyboard()
         {
@@ -134,5 +148,7 @@ namespace Appysights.ViewModels
                 return Position.Right;
             }
         }
+
+        #endregion
     }
 }

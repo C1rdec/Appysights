@@ -5,6 +5,8 @@ namespace Appysights.Services
 {
     public class SettingsService: AppdataServiceBase<Settings>
     {
+        #region Properties
+
         public Theme Theme
         {
             get
@@ -32,5 +34,7 @@ namespace Appysights.Services
         }
 
         protected override string FileName => "Settings.json";
+
+        #endregion
     }
 }

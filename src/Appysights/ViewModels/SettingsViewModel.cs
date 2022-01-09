@@ -6,7 +6,7 @@ using Caliburn.Micro;
 
 namespace Appysights.ViewModels
 {
-    public class SettingsViewModel : Caliburn.Micro.PropertyChangedBase
+    public class SettingsViewModel : PropertyChangedBase
     {
         #region Fields
 

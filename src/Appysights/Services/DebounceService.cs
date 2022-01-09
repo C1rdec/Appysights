@@ -5,8 +5,14 @@ namespace Appysights.Services
 {
     public class DebounceService
     {
+        #region Fields
+
         private DispatcherTimer _timer;
-    
+
+        #endregion
+
+        #region Methods
+
         public void Debounce(int interval, Action action)
         {
             _timer?.Stop();
@@ -26,5 +32,7 @@ namespace Appysights.Services
 
             _timer.Start();
         }
+
+        #endregion
     }
 }

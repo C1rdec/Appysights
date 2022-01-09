@@ -15,12 +15,18 @@ namespace Appysights.Services
 
         #endregion
 
+        #region Constructors
+
         public StatusbarService(AppInsightsService appInsightsService)
         {
             _exceptions = new List<ExceptionEvent>();
             _appInsightsService = appInsightsService;
             _initializeTask = InitializeCore();
         }
+
+        #endregion
+
+        #region Properties
 
         public AppInsightsService AppService => _appInsightsService;
 
@@ -35,5 +41,7 @@ namespace Appysights.Services
             var exceptions = await _appInsightsService.GetExceptionsFromToday();
             _exceptions.AddRange(exceptions);
         }
+
+        #endregion
     }
 }

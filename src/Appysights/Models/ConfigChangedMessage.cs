@@ -2,8 +2,12 @@
 {
     public class ConfigChangedMessage
     {
-        private static readonly ConfigChangedMessage _instance = new ConfigChangedMessage();
+        #region Properties
 
         public static ConfigChangedMessage Default => _instance;
+
+        private static readonly ConfigChangedMessage _instance = new ConfigChangedMessage();
+
+        #endregion
     }
 }

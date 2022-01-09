@@ -8,7 +8,13 @@ namespace Appysights.ViewModels
 {
     public abstract class EventViewModelBase : Screen
     {
+        #region Fields
+
         private static readonly Regex VersionRegex = new Regex("v[0-9]");
+
+        #endregion
+
+        #region Constructors
 
         public EventViewModelBase(AppInsightEvent appEvent)
         {
@@ -31,6 +37,10 @@ namespace Appysights.ViewModels
                 ActionName = FormatActionName(AppEvent.CustomDimensions);
             }
         }
+
+        #endregion
+
+        #region Properties
 
         public string Title { get; set; }
 
@@ -81,5 +91,7 @@ namespace Appysights.ViewModels
             var elementToTaKe = paths.Count - versionIndex;
             return string.Join(separator, paths.Skip(Math.Max(0, paths.Count - elementToTaKe)));
         }
+
+        #endregion
     }
 }

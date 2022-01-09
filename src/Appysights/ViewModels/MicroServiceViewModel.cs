@@ -15,7 +15,6 @@ namespace Appysights.ViewModels
         private MicroService _service;
         private Action<MicroServiceViewModel> _callback;
 
-
         #endregion
 
         #region Constructors

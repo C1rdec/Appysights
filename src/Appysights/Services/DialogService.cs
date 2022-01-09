@@ -5,9 +5,15 @@ namespace Appysights.Services
 {
     public class DialogService
     {
+        #region Fields
+
         private static readonly IDialogCoordinator Coordinator = DialogCoordinator.Instance;
 
         private object _context;
+
+        #endregion
+
+        #region Methods
 
         public async Task ShowProgressAsync(string title, string message, Task task)
         {
@@ -23,5 +29,7 @@ namespace Appysights.Services
         {
             _context = context;
         }
+
+        #endregion
     }
 }
