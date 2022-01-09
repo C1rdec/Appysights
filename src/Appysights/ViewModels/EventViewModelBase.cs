@@ -19,12 +19,14 @@ namespace Appysights.ViewModels
                 var request = requestEvent.Request;
                 Title = $"[{request.ResultCode}] {request.Name}";
                 Description = request.Url;
+                ActionName = $"Duration: {Math.Round(requestEvent.Request.Duration, 2)} ms";
             }
             else if (appEvent is ExceptionEvent exceptionEvent)
             {
                 var exception = exceptionEvent.Exception;
                 Title = exception.Type;
                 Description = string.IsNullOrEmpty(exception.Message) ? exception.OuterMessage : exception.Message;
+                ActionName = FormatActionName(AppEvent.CustomDimensions);
             }
         }
 
@@ -40,7 +42,7 @@ namespace Appysights.ViewModels
 
         public string Id => AppEvent.Id.ToString();
 
-        public string ActionName => FormatActionName(AppEvent.CustomDimensions);
+        public string ActionName { get; set; }
 
         protected AppInsightEvent AppEvent { get; private set; }
 

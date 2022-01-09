@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using Appysights.Models;
@@ -12,10 +13,13 @@ namespace Appysights.ViewModels
         #region Fields
 
         private AppInsightsService _service;
+        private IEnumerable<AppInsightEvent> _currentEvents;
         private Position _position;
         private int _pageIndex = 0;
         private int _pageSize = 20;
         private readonly object pageLock = new();
+        private bool _listenScroll = true;
+        private bool _requestMode;
 
         #endregion
 
@@ -28,6 +32,7 @@ namespace Appysights.ViewModels
             _service.NewEvent += Service_NewEvent;
             Events = new ObservableCollection<EventTileViewModel>();
 
+            _currentEvents = _service.Events;
             DisplayNextPage();
         }
 
@@ -41,12 +46,57 @@ namespace Appysights.ViewModels
 
         public bool Selected => Events.Any(e => e.Selected);
 
+        public bool RequestMode
+        {
+            get
+            {
+                return _requestMode;
+            }
+
+            private set
+            {
+                _requestMode = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
         #endregion
 
         #region Methods
 
+        public async void ToggleEvents()
+        {
+            Clear();
+            if (!RequestMode)
+            {
+                RequestMode = true;
+                _currentEvents = await _service.GetLastHourFailedRequests();
+            }
+            else
+            {
+                RequestMode = false;
+                _currentEvents = _service.Events;
+            }
+
+
+            DisplayNextPage();
+        }
+
+        public async void RefreshRequests()
+        {
+            Clear();
+            _currentEvents = await _service.GetLastHourFailedRequests();
+            DisplayNextPage();
+        }
+
         public void OnScroll(System.Windows.Controls.ScrollChangedEventArgs scrollEvent)
         {
+            if (!_listenScroll)
+            {
+                _listenScroll = true;
+                return;
+            }
+
             var position = scrollEvent.VerticalOffset + scrollEvent.ViewportHeight;
             var heightThreshold = scrollEvent.ExtentHeight / 1.1;
 
@@ -64,11 +114,6 @@ namespace Appysights.ViewModels
                     }
                 }
             }
-        }
-
-        public void Dispose()
-        {
-            _service.NewEvent -= Service_NewEvent;
         }
 
         public void Next()
@@ -111,6 +156,11 @@ namespace Appysights.ViewModels
             Events[index - 1].Select();
         }
 
+        public void Dispose()
+        {
+            _service.NewEvent -= Service_NewEvent;
+        }
+
         private void Service_NewEvent(object sender, AppInsightEvent e)
         {
             Events.Add(new EventTileViewModel(e, _position));
@@ -118,18 +168,27 @@ namespace Appysights.ViewModels
 
         private void DisplayNextPage()
         {
-            if (Events.Count >= _service.Events.Count())
+            if (Events.Count >= _currentEvents.Count())
             {
                 return;
             }
 
-            var eventToDisplay = _service.Events.Skip(_pageIndex * _pageSize).Take(_pageSize);
+            var eventToDisplay = _currentEvents.Skip(_pageIndex * _pageSize).Take(_pageSize);
             foreach (var appInsightEvent in eventToDisplay)
             {
                 Events.Add(new EventTileViewModel(appInsightEvent, _position));
             }
 
             _pageIndex++;
+        }
+
+        private void Clear()
+        {
+            _listenScroll = false;
+            Events.Clear();
+
+            _pageIndex = 0;
+            //NotifyOfPropertyChange(() => Events);
         }
 
         #endregion

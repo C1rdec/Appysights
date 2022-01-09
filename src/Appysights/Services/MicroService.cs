@@ -39,15 +39,15 @@ namespace Appysights.Services
 
         #region Methods
 
-        public void Watch() => ForeachApplication((a) => a.Watch());
+        public void Watch() => ForeachApplication((a) => a.WatchExceptions());
 
         public void Stop() => ForeachApplication((a) => a.Stop());
 
         public void Clear() => ForeachApplication((a) => a.Clear());
 
-        public void GetLast24Hour() => ForeachApplication((a) => a.GetLast24Hour());
+        public void GetLast24Hour() => ForeachApplication((a) => a.WatchLast24Hour());
 
-        public void GetLastHour() => ForeachApplication((a) => a.GetLastHour());
+        public void GetLastHour() => ForeachApplication((a) => a.WatchLastHour());
 
         public void ForeachApplication(Action<AppInsightsService> callback)
         {

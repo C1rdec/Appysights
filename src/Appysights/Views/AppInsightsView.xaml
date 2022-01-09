@@ -4,14 +4,61 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:cal="http://www.caliburnproject.org"
+             xmlns:local="clr-namespace:Appysights"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="600" d:DesignWidth="400">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
-        <TextBlock x:Name="ServiceName" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="28" FontWeight="SemiBold"/>
+        <Button x:Name="RefreshRequests"
+                Width="30"
+                Height="30"
+                Margin="0,0,20,0"
+                BorderThickness="0"
+                HorizontalAlignment="Right"
+                Foreground="{DynamicResource MahApps.Brushes.Accent}"
+                Grid.Column="1"
+                Cursor="Hand"
+                Visibility="{Binding RequestMode, Converter={StaticResource BooleanToVisibilityConverter}}"
+                Style="{StaticResource MahApps.Styles.Button.Circle}">
+            <Button.ContentTemplate>
+                <DataTemplate>
+                    <local:IconPack Foreground="White"
+                                HorizontalAlignment="Center"
+                                Width="25"
+                                Visibility="{Binding RequestMode, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                Data="{x:Static local:IconPackData.Refresh}"/>
+                </DataTemplate>
+            </Button.ContentTemplate>
+
+        </Button>
+        <Border Cursor="Hand"
+                cal:Message.Attach="[Event MouseDown] = [Action ToggleEvents()]"
+                BorderThickness="0"
+                CornerRadius="5" Padding="10,0,10,3"
+                HorizontalAlignment="Center"
+                Grid.Column="1">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding RequestMode}" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent4}"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock x:Name="ServiceName" FontSize="28" FontWeight="SemiBold" />
+                <local:IconPack Foreground="White"
+                                Margin="10,4,0,0"
+                                HorizontalAlignment="Center"
+                                Width="18"
+                                Visibility="{Binding RequestMode, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                Data="{x:Static local:IconPackData.Request}"/>
+            </StackPanel>
+        </Border>
         <ScrollViewer Grid.Row="1" cal:Message.Attach="[Event ScrollChanged] = [Action OnScroll($eventArgs)]">
             <ItemsControl x:Name="Events">
                 <ItemsControl.ItemsPanel>

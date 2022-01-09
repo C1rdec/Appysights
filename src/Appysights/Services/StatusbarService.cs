@@ -32,7 +32,7 @@ namespace Appysights.Services
 
         private async Task InitializeCore()
         {
-            var exceptions = await _appInsightsService.GetTodayAsync<ExceptionEvent>();
+            var exceptions = await _appInsightsService.GetExceptionsFromToday();
             _exceptions.AddRange(exceptions);
         }
     }

@@ -38,7 +38,7 @@ namespace Appysights.Services
 
         private string ApiKey => _configuration.ApiKey;
 
-        private static int Top => 250;
+        private static int Top => 5000;
 
         private string BaseUrl => $"https://api.applicationinsights.io/v1/apps/{ApplicationId}";
 
@@ -46,11 +46,11 @@ namespace Appysights.Services
 
         private string EventsUrl => $"{BaseUrl}/events";
 
-        private string TracesUrl => $"{EventsUrl}/traces?$top=5000";
+        private string TracesUrl => $"{EventsUrl}/traces?$top={Top}";
 
         private string RequestsUrl => $"{EventsUrl}/requests";
 
-        private string ExceptionsUrl => $"{EventsUrl}/exceptions?$top=5000";
+        private string ExceptionsUrl => $"{EventsUrl}/exceptions?$top={Top}";
 
         private string FailedRequestUrl => $"{RequestsUrl}?$filter=(request%2Fsuccess%20eq%20'False')&$top={Top}";
 
@@ -66,7 +66,7 @@ namespace Appysights.Services
 
         #region Methods
 
-        public async void Watch(bool needInit = true)
+        public async void WatchExceptions(bool needInit = true)
         {
             if (_watching)
             {
@@ -125,34 +125,22 @@ namespace Appysights.Services
             _tokenSource = null;
         }
 
-        public async Task<IEnumerable<T>> GetTodayAsync<T>()
-            where T : AppInsightEvent
-        {
-            var events = new List<T>();
+        public Task<IEnumerable<ExceptionEvent>> GetExceptionsFromToday() => GetTodayAsync<ExceptionEvent>();
 
-            using var exceptionPipeline = new EventPipeline<T>(GetUrl<T>(), (e) => events.Add(e), ApiKey);
-            await exceptionPipeline.GetLastDay();
-            var todayEvents = events.Where(e => e.Timestamp.ToLocalTime().Day == DateTime.Now.Day).OrderBy(e => e.Timestamp);
-            foreach (var todayEvent in todayEvents)
-            {
-                _events.Add(todayEvent);
-            }
+        public Task<IEnumerable<RequestEvent>> GetLastHourFailedRequests() => GetLastHourAsync<RequestEvent>();
 
-            return todayEvents;
-        }
-
-        public void GetLast24Hour()
+        public void WatchLast24Hour()
         {
             Clear();
             Stop();
-            Watch();
+            WatchExceptions();
         }
 
-        public void GetLastHour()
+        public void WatchLastHour()
         {
             Clear();
             Stop();
-            Watch(false);
+            WatchExceptions(false);
         }
 
         public void Clear()
@@ -172,12 +160,43 @@ namespace Appysights.Services
             NewEvent?.Invoke(this, appInsightEvent);
         }
 
+        private async Task<IEnumerable<T>> GetTodayAsync<T>()
+            where T : AppInsightEvent
+        {
+            var events = new List<T>();
+
+            using var exceptionPipeline = new EventPipeline<T>(GetUrl<T>(), (e) => events.Add(e), ApiKey);
+            await exceptionPipeline.GetLastDay();
+            var todayEvents = events.Where(e => e.Timestamp.ToLocalTime().Day == DateTime.Now.Day).OrderBy(e => e.Timestamp);
+            foreach (var todayEvent in todayEvents)
+            {
+                _events.Add(todayEvent);
+            }
+
+            return todayEvents;
+        }
+
+        private async Task<IEnumerable<T>> GetLastHourAsync<T>()
+            where T : AppInsightEvent
+        {
+            var events = new List<T>();
+
+            using var exceptionPipeline = new EventPipeline<T>(GetUrl<T>(), (e) => events.Add(e), ApiKey);
+            await exceptionPipeline.GetLastHour();
+
+            return events;
+        }
+
         private string GetUrl<T>()
             where T : AppInsightEvent
         {
             if (typeof(T) == typeof(ExceptionEvent))
             {
                 return ExceptionsUrl;
+            }
+            else if (typeof(T) == typeof(RequestEvent))
+            {
+                return FailedRequestUrl;
             }
             else if (typeof(T) == typeof(TraceEvent))
             {

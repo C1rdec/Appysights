@@ -65,6 +65,7 @@ namespace Appysights.ViewModels
         {
             Selected = true;
 
+            // For Keyboard navigation
             Execute.OnUIThread(() => 
             {
                 var view = GetView() as EventTileView;
