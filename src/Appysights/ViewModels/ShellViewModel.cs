@@ -18,12 +18,21 @@ namespace Appysights.ViewModels
         private FlyoutService _flyoutService;
         private KeyboardService _keyboardService;
         private UpdateManagerService _updateManagerService;
+        private DialogService _dialogService;
 
-        public ShellViewModel(DashboardViewModel dashboard, FlyoutService flyoutService, ThemeService themeService, KeyboardService keyboardService, UpdateManagerService updateManagerSerivce)
+        public ShellViewModel(
+            DashboardViewModel dashboard, 
+            FlyoutService flyoutService, 
+            ThemeService themeService, 
+            KeyboardService keyboardService, 
+            UpdateManagerService updateManagerSerivce,
+            DialogService dialogService)
         {
             _updateManagerService = updateManagerSerivce;
             _flyoutService = flyoutService;
             _keyboardService = keyboardService;
+            _dialogService = dialogService;
+            _dialogService.Register(this);
 
             _flyoutService.ShowFlyoutRequested += FlyoutService_ShowFlyout;
             _flyoutService.CloseFlyoutRequested += FlyoutService_CloseFlyout;
@@ -134,15 +143,7 @@ namespace Appysights.ViewModels
 
         public async void UpdateApplication()
         {
-            var needUpdate = await _updateManagerService.CheckForUpdate();
-            if (needUpdate)
-            {
-                await _updateManagerService.Update();
-            }
-            else
-            {
-                needUpdate = false;
-            }
+            await _dialogService.ShowProgressAsync("Updating...", "The application will restart", UpdateCore());
         }
 
         public string Version
@@ -185,6 +186,19 @@ namespace Appysights.ViewModels
         private void FlyoutService_CloseFlyout(object sender, EventArgs e)
         {
             CloseFlyout();
+        }
+
+        private async Task UpdateCore()
+        {
+            var needUpdate = await _updateManagerService.CheckForUpdate();
+            if (needUpdate)
+            {
+                await _updateManagerService.Update();
+            }
+            else
+            {
+                needUpdate = false;
+            }
         }
 
         #endregion

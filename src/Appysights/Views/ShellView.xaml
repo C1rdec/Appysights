@@ -11,6 +11,8 @@
         MinHeight="500"
         xmlns:local="clr-namespace:Appysights"
         MinWidth="800"
+        xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
+        Dialog:DialogParticipation.Register="{Binding}"
         Title="Appysights" Height="450" Width="800">
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>

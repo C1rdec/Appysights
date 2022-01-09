@@ -49,8 +49,9 @@ namespace Appysights
             _container = new SimpleContainer();
             _container.Singleton<SettingsService, SettingsService>();
             _container.Singleton<FlyoutService, FlyoutService>();
-            _container.Singleton<ThemeService, ThemeService>();
+            _container.Singleton<ThemeService, ThemeService>(); 
             _container.Singleton<KeyboardService, KeyboardService>();
+            _container.Singleton<DialogService, DialogService>();
             _container.Singleton<SettingsViewModel, SettingsViewModel>();
             _container.Singleton<DashboardViewModel, DashboardViewModel>();
             _container.Singleton<IWindowManager, WindowManager>();

@@ -25,6 +25,7 @@ namespace Appysights.ViewModels
             {
                 NotInitialize = false;
                 NotifyOfPropertyChange(() => HasExceptions);
+                NotifyOfPropertyChange(() => HasExceptionsSilenced);
             });
         }
 

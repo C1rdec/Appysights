@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:cal="http://www.caliburnproject.org"
+             xmlns:local="clr-namespace:Appysights"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -32,16 +33,17 @@
                     </Style.Triggers>
                 </Style>
             </Border.Style>
+            <TextBlock HorizontalAlignment="Center" Background="Transparent" VerticalAlignment="Center" x:Name="StatusbarName" Grid.ColumnSpan="2"/>
         </Border>
         <Border Grid.Column="1" 
-                Width="15"
+                Width="25"
                 Cursor="Hand" 
                 cal:Message.Attach="[Event MouseDown] = [Action Silence()]" 
-                Visibility="{Binding HasExceptions, Converter={StaticResource BooleanToVisibilityConverter}}">
+                Visibility="{Binding HasExceptionsSilenced, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Border.Style>
                 <Style TargetType="Border">
                     <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent3}"/>
-                    <Setter Property="Opacity" Value="0.75"/>
+                    <Setter Property="Opacity" Value="0.70"/>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding HasExceptionsSilenced}" Value="True">
                             <Setter Property="Background" Value="#f44336"/>
@@ -55,7 +57,12 @@
                     </Style.Triggers>
                 </Style>
             </Border.Style>
+            <local:IconPack Foreground="White"
+                            Margin="5"
+                                HorizontalAlignment="Center"
+                                Visibility="{Binding IsException, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                Data="{x:Static local:IconPackData.Lamp}">
+            </local:IconPack>
         </Border>
-        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="StatusbarName" Grid.ColumnSpan="2"/>
     </Grid>
 </UserControl>
