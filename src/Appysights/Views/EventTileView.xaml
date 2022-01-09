@@ -19,7 +19,7 @@
             </Style>
         </Border.Style>
         <Grid>
-            <Grid Margin="0,6,0,0">
+            <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition/>
@@ -37,7 +37,7 @@
                                 Visibility="{Binding IsException, Converter={StaticResource BooleanToVisibilityConverter}}"
                                 Data="{x:Static local:IconPackData.Error}">
                 </local:IconPack>
-                <Grid Margin="0,10,10,10" Grid.Column="1">
+                <Grid Margin="0,14,10,10" Grid.Column="1">
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition/>
