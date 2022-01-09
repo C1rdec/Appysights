@@ -56,7 +56,7 @@
                             </Style>
                         </TextBlock.Style>
                     </TextBlock>
-                    <TextBlock x:Name="Description" Grid.Row="1">
+                    <TextBlock x:Name="DescriptionOverview" Grid.Row="1">
                         <TextBlock.Style>
                             <Style TargetType="TextBlock">
                                 <Style.Triggers>

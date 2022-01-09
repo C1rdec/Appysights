@@ -81,6 +81,12 @@ namespace Appysights.ViewModels
                 var index = Applications.IndexOf(selectedApplication);
                 if (index == -1 || index + 1 >= Applications.Count())
                 {
+                    var first = Applications.FirstOrDefault();
+                    if (first != null)
+                    {
+                        first.Next();
+                    }
+
                     return;
                 }
 

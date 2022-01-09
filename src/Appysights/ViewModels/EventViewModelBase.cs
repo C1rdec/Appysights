@@ -18,19 +18,25 @@ namespace Appysights.ViewModels
             {
                 var request = requestEvent.Request;
                 Title = $"[{request.ResultCode}] {request.Name}";
-                Description = request.Url;
+                DescriptionOverview = appEvent.GetSimpleLocalDate();
+                Description = requestEvent.Request.Url;
                 ActionName = $"Duration: {Math.Round(requestEvent.Request.Duration, 2)}s";
             }
             else if (appEvent is ExceptionEvent exceptionEvent)
             {
                 var exception = exceptionEvent.Exception;
                 Title = exception.Type;
-                Description = string.IsNullOrEmpty(exception.Message) ? exception.OuterMessage : exception.Message;
+
+                var message = string.IsNullOrEmpty(exception.Message) ? exception.OuterMessage : exception.Message;
+                DescriptionOverview = message;
+                Description = message;
                 ActionName = FormatActionName(AppEvent.CustomDimensions);
             }
         }
 
         public string Title { get; set; }
+
+        public string DescriptionOverview { get; set; }
 
         public string Description { get; set; }
 

@@ -16,13 +16,21 @@ namespace Appysights.Models
 
         public CustomDimensions CustomDimensions { get; set; }
 
+        private DateTime LocalDate => Timestamp.ToLocalTime();
+
+
         #endregion
 
         #region Methods
 
         public string GetLocalDate()
         {
-            return Timestamp.ToLocalTime().ToString("f");
+            return LocalDate.ToString("f");
+        }
+
+        public string GetSimpleLocalDate()
+        {
+            return LocalDate.ToString("h:mm tt");
         }
 
         #endregion
