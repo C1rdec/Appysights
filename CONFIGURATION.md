@@ -1,6 +1,6 @@
 # Summary
 Appysights need a configuration file to know how to display and where to fetch the informations. <br/>
-This configuration file is a json representation of [Configuration.cs](https://github.com/C1rdec/Appysights/blob/9aecadbce39a4ed8e1d490e532cc254e09b5aaed/src/Appysights/Models/Configuration.cs#L1-L24)<br/>
+This configuration file is a json representation of [Configuration.cs](https://github.com/C1rdec/Appysights/blob/9aecadbce39a4ed8e1d490e532cc254e09b5aaed/src/Appysights/Models/Configuration.cs#L1-L24) with `.sights` extension<br/>
 
 There's two main concepts `Service` and `Application`
 - Service
