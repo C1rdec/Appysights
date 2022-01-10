@@ -84,8 +84,9 @@ namespace Appysights.ViewModels
 
         public void OnClick()
         {
-            Selected = true;
+            // We need to invoke before settings selected
             _onClick?.Invoke();
+            Selected = !Selected;
         }
 
         public void Silence()

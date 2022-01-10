@@ -59,6 +59,8 @@ namespace Appysights.ViewModels
 
         public bool HasNoConfiguration => !HasConfiguration;
 
+        public bool HasStatusbarConfiguration => HasConfiguration && _configurationService.Entity.Statusbar != null;
+
         #endregion
 
         #region Methods
@@ -170,6 +172,7 @@ namespace Appysights.ViewModels
 
             NotifyOfPropertyChange(() => HasConfiguration);
             NotifyOfPropertyChange(() => HasNoConfiguration);
+            NotifyOfPropertyChange(() => HasStatusbarConfiguration);
         }
 
         private void InitializeKeyboard()
@@ -225,6 +228,13 @@ namespace Appysights.ViewModels
         public void OnStatusBarClick()
         {
             _flyoutService.Close();
+            if (Statusbar.Selected)
+            {
+                ClearSelectedMicroService();
+
+                return;
+            }
+
             if (_selectedMicro != null)
             {
                 _selectedMicro.Selected = false;
@@ -272,8 +282,17 @@ namespace Appysights.ViewModels
                 Statusbar.Selected = false;
             }
 
-            SelectedMicroService?.Dispose();
-            SelectedMicroService = null;
+            ClearSelectedMicroService();
+        }
+
+        private void ClearSelectedMicroService()
+        {
+            if (SelectedMicroService != null)
+            {
+                SelectedMicroService.Dispose();
+                SelectedMicroService = null;
+            }
+
             NotifyOfPropertyChange(() => SelectedMicroService);
         }
 

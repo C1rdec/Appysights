@@ -72,7 +72,7 @@
                     </Grid>
                 </Grid>
             <ContentControl x:Name="SelectedMicroService" Grid.Row="1" Grid.ColumnSpan="2"/>
-            <ContentControl x:Name="Statusbar" Grid.Row="2" Height="23" Grid.ColumnSpan="2"/>
+            <ContentControl x:Name="Statusbar" Grid.Row="2" Height="23" Grid.ColumnSpan="2" Visibility="{Binding HasStatusbarConfiguration, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         </Grid>
 
         <Button 

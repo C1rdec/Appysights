@@ -62,6 +62,11 @@ namespace Appysights.ViewModels
 
         private string FormatActionName(CustomDimensions customDimensions)
         {
+            if (customDimensions == null)
+            {
+                return string.Empty;
+            }
+
             var actionName = customDimensions.ActionName;
             if (!string.IsNullOrEmpty(actionName))
             {
