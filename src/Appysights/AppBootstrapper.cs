@@ -51,13 +51,16 @@ namespace Appysights
             _container.Singleton<FlyoutService, FlyoutService>();
             _container.Singleton<ThemeService, ThemeService>(); 
             _container.Singleton<KeyboardService, KeyboardService>();
-            _container.Singleton<DialogService, DialogService>();
             _container.Singleton<SettingsViewModel, SettingsViewModel>();
             _container.Singleton<DashboardViewModel, DashboardViewModel>();
+            _container.Singleton<SplashScreenViewModel, SplashScreenViewModel>();
             _container.Singleton<IWindowManager, WindowManager>();
             _container.Singleton<ConfigurationService, ConfigurationService>();
             _container.Singleton<IEventAggregator, EventAggregator>();
+
+            _container.PerRequest<DialogService, DialogService>();
             _container.PerRequest<ShellViewModel, ShellViewModel>();
+
             _container.Instance(Application);
             _container.Instance(_updateManager);
         }

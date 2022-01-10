@@ -144,7 +144,9 @@ namespace Appysights.ViewModels
 
         public async void UpdateApplication()
         {
-            await _dialogService.ShowProgressAsync("Updating...", "The application will restart", UpdateCore());
+            CurrentView = IoC.Get<SplashScreenViewModel>();
+            NotifyOfPropertyChange(() => CurrentView);
+            await _dialogService.ShowProgressAsync("Updating...", "Appysights will restart", UpdateCore());
         }
 
         public string Version
