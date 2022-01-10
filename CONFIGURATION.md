@@ -32,7 +32,8 @@ There's two main concepts `Service` and `Application`
           "ApiKey": "DEMO_KEY"
         }
       ]
-    }],
+    }
+  ],
   "Statusbar": {
     "Name": "Statusbar",
     "ApplicationId": "DEMO_APP",
