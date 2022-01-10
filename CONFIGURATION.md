@@ -24,7 +24,7 @@ There's two main concepts `Service` and `Application`
 {
   "Services": [
     {
-      "Name": "Demo",
+      "Name": "Service",
       "Applications": [
         {
           "Name": "App",
@@ -32,7 +32,11 @@ There's two main concepts `Service` and `Application`
           "ApiKey": "DEMO_KEY"
         }
       ]
-    }
-  ]
+    }],
+  "Statusbar": {
+    "Name": "Statusbar",
+    "ApplicationId": "DEMO_APP",
+    "ApiKey": "DEMO_KEY"
+  }
 }
 ```
