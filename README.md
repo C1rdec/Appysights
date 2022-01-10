@@ -6,7 +6,7 @@ Just a simple `Configuration File (.sights)` is needed and you are ready to roll
 ## Usage
 - Install ≥ [.NET 6](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
 - Download and run [`AppysightsSetup.exe`](https://github.com/C1rdec/Appysights/releases/latest/download/AppysightsSetup.exe)
-     - You will get some warnings since the installer is not sign yet
+     - You will get some warnings since the Setup is not sign yet
 - Import your `Configuration File (.sights)`
 <br/>
 
