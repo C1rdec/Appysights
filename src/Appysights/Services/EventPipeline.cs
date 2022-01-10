@@ -41,19 +41,6 @@ namespace Appysights.Services
 
         #region Methods
 
-        public Task Next()
-        {
-            if (!_initialize)
-            {
-                _initialize = true;
-                return GetLastDay();
-            }
-            else
-            {
-                return GetLastHour();
-            }
-        }
-
         public Task GetLastHour() => GetEvents(LastHourUrl(1));
 
         public Task GetLastDay() => GetEvents(LastDayUrl(1));
@@ -61,7 +48,6 @@ namespace Appysights.Services
         private async Task GetEvents(string url)
         {
             var text = await GetText(url, _header);
-
             var response = JsonHelper.Deserialize<AzureResponse<T>>(text);
             HandleEvents(response.Value);
         }
