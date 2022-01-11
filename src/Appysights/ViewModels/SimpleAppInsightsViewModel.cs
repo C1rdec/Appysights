@@ -11,6 +11,7 @@ namespace Appysights.ViewModels
 
         private AppInsightsService _service;
         private DebounceService _debounceService;
+        private bool _isBusy;
 
         #endregion
 
@@ -23,6 +24,7 @@ namespace Appysights.ViewModels
             ApplicationName = service.Name;
 
             _service.NewEvent += this.Service_NewEvent;
+            _service.BusyChanged += Service_BusyChanged;
             _service.Cleared += this.Service_Cleared;
         }
 
@@ -36,6 +38,23 @@ namespace Appysights.ViewModels
 
         public string ErrorCountValue => ErrorCount == 0 ? "-" : ErrorCount.ToString();
 
+        public bool IsReady => !IsBusy;
+
+        public bool IsBusy
+        {
+            get
+            {
+                return _isBusy;
+            }
+
+            private set
+            {
+                _isBusy = value;
+                NotifyOfPropertyChange();
+                NotifyOfPropertyChange(() => IsReady);
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -43,6 +62,7 @@ namespace Appysights.ViewModels
         public void Dispose()
         {
             _service.Cleared -= this.Service_Cleared;
+            _service.BusyChanged -= this.Service_BusyChanged;
             _service.NewEvent -= this.Service_NewEvent;
         }
 
@@ -57,6 +77,11 @@ namespace Appysights.ViewModels
         private void Service_Cleared(object sender, EventArgs e)
         {
             NotifyOfPropertyChange(() => ErrorCountValue);
+        }
+
+        private void Service_BusyChanged(object sender, bool e)
+        {
+            IsBusy = e;
         }
 
         #endregion

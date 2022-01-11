@@ -10,9 +10,10 @@ namespace Appysights.Services
     public class AppInsightsService
     {
         #region Fields
-
+        private static int Top => 5000;
         private CancellationTokenSource _tokenSource;
         private bool _watching;
+        private bool _isBusy;
         private List<AppInsightEvent> _events;
         private AppInsightsConfiguration _configuration;
 
@@ -32,13 +33,13 @@ namespace Appysights.Services
 
         public string Name => _configuration.Name;
 
+        public bool IsBusy => _isBusy;
+
         public IEnumerable<AppInsightEvent> Events => _events;
 
         private string ApplicationId => _configuration.ApplicationId;
 
         private string ApiKey => _configuration.ApiKey;
-
-        private static int Top => 5000;
 
         private string BaseUrl => $"https://api.applicationinsights.io/v1/apps/{ApplicationId}";
 
@@ -61,6 +62,8 @@ namespace Appysights.Services
         public event EventHandler<AppInsightEvent> NewEvent;
 
         public event EventHandler Cleared;
+
+        public event EventHandler<bool> BusyChanged;
 
         #endregion
 
@@ -93,7 +96,8 @@ namespace Appysights.Services
                 if (!initialize)
                 {
                     initialize = true;
-                    tasks.Add(exceptionPipeline.GetLastDay());
+                    InvokeBusyChanged(true);
+                    tasks.Add(exceptionPipeline.GetLastDay().ContinueWith((t) => InvokeBusyChanged(false)));
                 }
                 else
                 {
@@ -146,6 +150,12 @@ namespace Appysights.Services
         {
             _events.Clear();
             Cleared?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void InvokeBusyChanged(bool isBusy)
+        {
+            _isBusy = isBusy;
+            BusyChanged?.Invoke(this, isBusy);
         }
 
         private void NewEventAction(AppInsightEvent appInsightEvent)

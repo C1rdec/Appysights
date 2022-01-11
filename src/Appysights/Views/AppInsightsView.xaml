@@ -65,7 +65,7 @@
             </StackPanel>
         </Border>
 
-        <busy:BusyMask x:Name="BusyIndicator" Grid.Row="1" IsBusy="{Binding IsBusy}" IndicatorType="Piston" BusyContent=" " Background="Transparent" >
+        <busy:BusyMask x:Name="BusyIndicator" Grid.Row="1" IsBusy="{Binding IsBusy}" IndicatorType="Piston" BusyContent=" " Background="Transparent">
             <ScrollViewer Grid.Row="1" cal:Message.Attach="[Event ScrollChanged] = [Action OnScroll($eventArgs)]">
                 <ItemsControl x:Name="Events">
                     <ItemsControl.ItemsPanel>

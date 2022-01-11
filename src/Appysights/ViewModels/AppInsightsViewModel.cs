@@ -5,11 +5,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Appysights.Models;
 using Appysights.Services;
+using Caliburn.Micro;
 using MahApps.Metro.Controls;
 
 namespace Appysights.ViewModels
 {
-    public class AppInsightsViewModel : Caliburn.Micro.PropertyChangedBase, System.IDisposable
+    public class AppInsightsViewModel : PropertyChangedBase, System.IDisposable
     {
         #region Fields
 
@@ -31,11 +32,31 @@ namespace Appysights.ViewModels
         {
             _position = position;
             _service = service;
-            _service.NewEvent += Service_NewEvent;
             Events = new ObservableCollection<EventTileViewModel>();
 
-            _currentEvents = _service.Events;
-            DisplayNextPage();
+            if (_service.IsBusy)
+            {
+                IsBusy = true;
+                _service.BusyChanged += Service_BusyChanged;
+                
+            }
+            else
+            {
+                _service.NewEvent += Service_NewEvent;
+                _currentEvents = _service.Events;
+                DisplayNextPage();
+            }
+        }
+
+        private void Service_BusyChanged(object sender, bool e)
+        {
+            if (!e)
+            {
+                IsBusy = false;
+                _service.NewEvent += Service_NewEvent;
+                _currentEvents = _service.Events;
+                Execute.OnUIThread(() => DisplayNextPage());
+            }
         }
 
         #endregion
@@ -177,6 +198,7 @@ namespace Appysights.ViewModels
         public void Dispose()
         {
             _service.NewEvent -= Service_NewEvent;
+            _service.BusyChanged -= Service_BusyChanged;
         }
 
         private async Task<IEnumerable<RequestEvent>> GetLastHourFailedRequests()
@@ -189,7 +211,7 @@ namespace Appysights.ViewModels
 
         private void Service_NewEvent(object sender, AppInsightEvent e)
         {
-            Events.Add(new EventTileViewModel(e, _position));
+            Events.Insert(0, new EventTileViewModel(e, _position));
         }
 
         private void DisplayNextPage()

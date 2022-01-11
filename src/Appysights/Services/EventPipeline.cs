@@ -17,7 +17,6 @@ namespace Appysights.Services
         private Action<T> _callback;
         private T _lastEvent;
         private Dictionary<string, string> _header;
-        private bool _initialize;
         private readonly string _variableCharacter;
 
         #endregion
