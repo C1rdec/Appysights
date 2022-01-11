@@ -211,6 +211,11 @@ namespace Appysights.ViewModels
 
         private void Service_NewEvent(object sender, AppInsightEvent e)
         {
+            if (RequestMode)
+            {
+                return;
+            }
+
             Events.Insert(0, new EventTileViewModel(e, _position));
         }
 
