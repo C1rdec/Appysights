@@ -7,7 +7,7 @@
     <UserSecretsId>db3bcfbf-205b-4839-a27c-56bf80462b28</UserSecretsId>
     <ApplicationIcon>Ressources\Appysights.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <Version>1.0.7</Version>
+    <Version>1.0.8</Version>
   </PropertyGroup>
 
   <ItemGroup>
