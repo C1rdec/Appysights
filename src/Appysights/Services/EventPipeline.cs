@@ -51,34 +51,36 @@ namespace Appysights.Services
             HandleEvents(response.Value);
         }
 
-        private void HandleEvents(IEnumerable<T> appInsightEvents)
+        private void HandleEvents(List<T> appInsightEvents)
         {
-            var lastEventSet = false;
+            var newEvents = new List<T>();
             if (_lastEvent == null)
             {
                 _lastEvent = appInsightEvents.FirstOrDefault();
-                foreach (var appInsightEvent in appInsightEvents)
-                {
-                    _callback?.Invoke(appInsightEvent);
-                }
-
-                return;
+                newEvents.AddRange(appInsightEvents);
             }
-
-            foreach (var appInsightEvent in appInsightEvents)
+            else
             {
-                if (appInsightEvent.Id == _lastEvent.Id)
+                var currentLastEvent = appInsightEvents.FirstOrDefault(a => a.Id == _lastEvent.Id);
+                if (currentLastEvent == null)
                 {
                     return;
                 }
 
-                if (!lastEventSet)
+                var index = appInsightEvents.IndexOf(currentLastEvent);
+                if (index == 0 || index == -1)
                 {
-                    lastEventSet = true;
-                    _lastEvent = appInsightEvent;
+                    return;
                 }
 
-                _callback?.Invoke(appInsightEvent);
+                _lastEvent = appInsightEvents.FirstOrDefault();
+                newEvents.AddRange(appInsightEvents.Take(index));
+                newEvents.Reverse();
+            }
+
+            foreach (var newEvent in newEvents)
+            {
+                _callback?.Invoke(newEvent);
             }
         }
 

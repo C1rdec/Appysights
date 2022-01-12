@@ -162,7 +162,6 @@ namespace Appysights.Services
         private void NewEventAction(AppInsightEvent appInsightEvent)
         {
             if (_events.Any(e => e.Id == appInsightEvent.Id))
-            
             {
                 return;
             }

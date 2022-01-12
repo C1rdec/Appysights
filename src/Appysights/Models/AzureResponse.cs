@@ -6,7 +6,7 @@ namespace Appysights.Models
     {
         #region Properties
 
-        public IEnumerable<T> Value { get; set; }
+        public List<T> Value { get; set; }
 
         #endregion
     }
