@@ -16,8 +16,7 @@ namespace Appysights.Models
 
         public CustomDimensions CustomDimensions { get; set; }
 
-        private DateTime LocalDate => Timestamp.ToLocalTime();
-
+        public DateTime LocalDate => Timestamp.ToLocalTime();
 
         #endregion
 

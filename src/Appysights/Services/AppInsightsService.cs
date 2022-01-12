@@ -10,6 +10,7 @@ namespace Appysights.Services
     public class AppInsightsService
     {
         #region Fields
+
         private static int Top => 5000;
         private CancellationTokenSource _tokenSource;
         private bool _watching;
@@ -35,7 +36,7 @@ namespace Appysights.Services
 
         public bool IsBusy => _isBusy;
 
-        public IEnumerable<AppInsightEvent> Events => _events;
+        public IEnumerable<AppInsightEvent> Events => _events.OrderByDescending(e => e.Timestamp);
 
         private string ApplicationId => _configuration.ApplicationId;
 
@@ -161,6 +162,7 @@ namespace Appysights.Services
         private void NewEventAction(AppInsightEvent appInsightEvent)
         {
             if (_events.Any(e => e.Id == appInsightEvent.Id))
+            
             {
                 return;
             }

@@ -69,7 +69,13 @@
                     </TextBlock>
                 </Grid>
             </Grid>
-            <Border Background="{DynamicResource Brushes.HighLight}" HorizontalAlignment="Right" VerticalAlignment="Top" CornerRadius="4" Margin="0,-4,-2,0">
+            <Border HorizontalAlignment="Right" VerticalAlignment="Top" CornerRadius="4" Margin="0,-4,-2,0">
+                <Border.Background>
+                    <LinearGradientBrush SpreadMethod="Repeat" EndPoint="0,0">
+                        <GradientStop Color="{DynamicResource Colors.HighLight}" Offset="{Binding LocalDate, Converter={StaticResource DateToColorConverter}}" />
+                        <GradientStop Color="{DynamicResource MahApps.Colors.Accent}" Offset="2" />
+                    </LinearGradientBrush>
+                </Border.Background>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock x:Name="SimpleDateTime"
                            Foreground="White"

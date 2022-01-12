@@ -44,6 +44,8 @@ namespace Appysights.ViewModels
 
         public string Title { get; set; }
 
+        public DateTime LocalDate => AppEvent.LocalDate;
+
         public string Description { get; set; }
 
         public bool IsRequest => AppEvent is RequestEvent;

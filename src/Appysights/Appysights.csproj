@@ -11,6 +11,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="C:\Users\cedri\.nuget\packages\busyindicator\1.9.0\contentFiles\any\net5.0-windows7.0\Icon.ico" />
+    <Content Remove="C:\Users\cedri\.nuget\packages\busyindicator\1.9.0\contentFiles\any\net5.0-windows7.0\Icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Assets\Appysights.png" />
   </ItemGroup>
 
