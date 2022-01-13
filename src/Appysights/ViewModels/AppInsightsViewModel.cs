@@ -226,7 +226,18 @@ namespace Appysights.ViewModels
                 return;
             }
 
-            var eventToDisplay = _currentEvents.Skip(_pageIndex * _pageSize).Take(_pageSize);
+            var eventToDisplay = Enumerable.Empty<AppInsightEvent>();
+
+            if (Events.Count < _pageSize)
+            {
+                // This is to handle when event are removed from the list
+                eventToDisplay =  _currentEvents.Skip(Events.Count).Take(_pageSize);
+            }
+            else
+            {
+                eventToDisplay = _currentEvents.Skip(_pageIndex * _pageSize).Take(_pageSize);
+            }
+
             foreach (var appInsightEvent in eventToDisplay)
             {
                 Events.Add(new EventTileViewModel(appInsightEvent, _position, RemoveEvent));
