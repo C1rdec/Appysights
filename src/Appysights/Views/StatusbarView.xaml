@@ -19,7 +19,7 @@
                     <Setter Property="Opacity" Value="0.50"/>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding HasExceptionsSilenced}" Value="True">
-                            <Setter Property="Background" Value="#f44336"/>
+                            <Setter Property="Background" Value="{StaticResource Brushes.Error}"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Selected}" Value="True">
                             <Setter Property="Background" Value="{DynamicResource Brushes.HighLight}"/>
@@ -46,7 +46,7 @@
                     <Setter Property="Opacity" Value="0.70"/>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding HasExceptionsSilenced}" Value="True">
-                            <Setter Property="Background" Value="#f44336"/>
+                            <Setter Property="Background" Value="{StaticResource Brushes.Error}"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding NotInitialize}" Value="True">
                             <Setter Property="Background" Value="Gray"/>

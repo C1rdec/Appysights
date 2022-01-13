@@ -177,9 +177,21 @@ namespace Appysights.ViewModels
         protected override async void OnViewLoaded(object view)
         {
             NeedUpdate = await _updateManagerService.CheckForUpdate();
+            if (!NeedUpdate)
+            {
+                _updateManagerService.UpdateRequested +=UpdateManagerService_UpdateRequested;
+                _updateManagerService.Watch();
+            }
+
             await Task.Delay(200);
             await _keyboardService.InstallAsync();
         }
+
+        private void UpdateManagerService_UpdateRequested(object sender, EventArgs e)
+        {
+            NeedUpdate = true;
+        }
+
         private void FlyoutService_ShowFlyout(object sender, FlyoutRequest e)
         {
             ShowFlyout(e.Header, e.Content, e.Position);

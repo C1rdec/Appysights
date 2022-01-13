@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Timers;
 using System.Threading.Tasks;
 using Squirrel;
 
@@ -12,6 +14,13 @@ namespace Appysights.Services
         #region Fields
 
         private static readonly string GithubUrl = "https://github.com/C1rdec/Appysights";
+        private Timer _timer;
+
+        #endregion
+
+        #region Events
+
+        public event EventHandler UpdateRequested;
 
         #endregion
 
@@ -59,6 +68,30 @@ namespace Appysights.Services
         public void HandleSquirrel()
         {
             SquirrelAwareApp.HandleEvents(onInitialInstall: OnInstall, onAppUninstall: OnUninstall);
+        }
+
+        public void Watch()
+        {
+            if (_timer != null)
+            {
+                _timer.Stop();
+                _timer.Elapsed -=Timer_Elapsed;
+                _timer.Dispose();
+                _timer = null;
+            }
+
+            _timer = new Timer(30000);
+            _timer.Elapsed += Timer_Elapsed;
+            _timer.Start();
+        }
+
+        private async void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            var needUpdate = await CheckForUpdate();
+            if (needUpdate)
+            {
+                UpdateRequested?.Invoke(this, EventArgs.Empty);
+            }
         }
 
         private async void OnInstall(System.Version version)

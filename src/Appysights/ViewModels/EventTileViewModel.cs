@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Appysights.Models;
 using Appysights.Views;
 using Caliburn.Micro;
@@ -13,15 +14,20 @@ namespace Appysights.ViewModels
         private Position _position;
         private string _environment;
         private bool _selected;
+        private bool _skipMainAction;
+        private Action<EventTileViewModel> _removeCallback;
+        private AppInsightEvent _event;
 
         #endregion
 
         #region Constructors
 
-        public EventTileViewModel(AppInsightEvent appEvent, Position position)
+        public EventTileViewModel(AppInsightEvent appEvent, Position position, Action<EventTileViewModel> removeCallback)
             : base(appEvent)
         {
+            _removeCallback = removeCallback;
             _position = position;
+            _event = appEvent;
             if (appEvent.Cloud != null)
             {
                 var items = appEvent.Cloud.RoleName.Split("-");
@@ -39,6 +45,8 @@ namespace Appysights.ViewModels
         #endregion
 
         #region Properties
+
+        public AppInsightEvent Event => _event;
 
         public string Environment => _environment;
 
@@ -62,12 +70,19 @@ namespace Appysights.ViewModels
 
         public void OnClick()
         {
-            if (Selected)
+            if (Selected || _skipMainAction)
             {
+                _skipMainAction = false;
                 return;
             }
 
             Select();
+        }
+
+        public void Remove()
+        {
+            _skipMainAction = true;
+            _removeCallback(this);
         }
 
         public void Close()

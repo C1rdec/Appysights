@@ -17,6 +17,7 @@ namespace Appysights.Services
         private bool _isBusy;
         private List<AppInsightEvent> _events;
         private AppInsightsConfiguration _configuration;
+        private DebounceService _debounceService;
 
         #endregion
 
@@ -24,6 +25,7 @@ namespace Appysights.Services
 
         public AppInsightsService(AppInsightsConfiguration configuration)
         {
+            _debounceService = new DebounceService();
             _configuration = configuration;
             _events = new List<AppInsightEvent>();
         }
@@ -59,6 +61,8 @@ namespace Appysights.Services
         #endregion
 
         #region Events
+
+        public event EventHandler<int> CountChanged;
 
         public event EventHandler<AppInsightEvent> NewEvent;
 
@@ -153,6 +157,12 @@ namespace Appysights.Services
             Cleared?.Invoke(this, EventArgs.Empty);
         }
 
+        public void Remove(AppInsightEvent eventToRemove)
+        {
+            _events.Remove(eventToRemove);
+            CountChanged?.Invoke(this, _events.Count);
+        }
+
         private void InvokeBusyChanged(bool isBusy)
         {
             _isBusy = isBusy;
@@ -168,6 +178,10 @@ namespace Appysights.Services
 
             this._events.Add(appInsightEvent);
             NewEvent?.Invoke(this, appInsightEvent);
+            _debounceService.Debounce(300, () =>
+            {
+                CountChanged?.Invoke(this, _events.Count());
+            });
         }
 
         private async Task<IEnumerable<T>> GetTodayAsync<T>()

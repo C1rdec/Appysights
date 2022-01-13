@@ -56,7 +56,7 @@
                             </Style>
                         </TextBlock.Style>
                     </TextBlock>
-                    <TextBlock x:Name="Description" Grid.Row="1">
+                    <TextBlock x:Name="Description" Grid.Row="1" LineHeight="16" MaxHeight="32" TextWrapping="Wrap">
                         <TextBlock.Style>
                             <Style TargetType="TextBlock">
                                 <Style.Triggers>
@@ -69,13 +69,24 @@
                     </TextBlock>
                 </Grid>
             </Grid>
-            <Border HorizontalAlignment="Right" VerticalAlignment="Top" CornerRadius="4" Margin="0,-4,-2,0">
-                <Border.Background>
-                    <LinearGradientBrush SpreadMethod="Repeat" EndPoint="0,0">
-                        <GradientStop Color="{DynamicResource Colors.HighLight}" Offset="{Binding LocalDate, Converter={StaticResource DateToColorConverter}}" />
-                        <GradientStop Color="{DynamicResource MahApps.Colors.Accent}" Offset="2" />
-                    </LinearGradientBrush>
-                </Border.Background>
+            <Border HorizontalAlignment="Right" VerticalAlignment="Top" CornerRadius="4" Margin="0,-4,-2,0" cal:Message.Attach="[Event MouseDown] = [Action Remove()]">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="Background" >
+                            <Setter.Value>
+                                <LinearGradientBrush SpreadMethod="Repeat" EndPoint="0,0">
+                                    <GradientStop Color="{DynamicResource Colors.HighLight}" Offset="{Binding LocalDate, Converter={StaticResource DateToColorConverter}}" />
+                                    <GradientStop Color="{DynamicResource MahApps.Colors.Accent}" Offset="2" />
+                                </LinearGradientBrush>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{StaticResource Brushes.Error}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock x:Name="SimpleDateTime"
                            Foreground="White"

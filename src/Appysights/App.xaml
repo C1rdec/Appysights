@@ -55,10 +55,12 @@
                         </Setter>
                     </Style>
                 </ResourceDictionary>
-                
+
                 <ResourceDictionary>
+                    <Color x:Key="Colors.Error">#f44336</Color>
                     <Color x:Key="Colors.HighLight">#1565C0</Color>
                     <SolidColorBrush x:Key="Brushes.HighLight" Color="{StaticResource Colors.HighLight}" />
+                    <SolidColorBrush x:Key="Brushes.Error" Color="{StaticResource Colors.Error}" />
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
             <Style TargetType="{x:Type local:IconPack}" BasedOn="{StaticResource PackIconStyle}" />

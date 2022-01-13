@@ -23,9 +23,9 @@ namespace Appysights.ViewModels
             _debounceService = new DebounceService();
             ApplicationName = service.Name;
 
-            _service.NewEvent += this.Service_NewEvent;
             _service.BusyChanged += Service_BusyChanged;
-            _service.Cleared += this.Service_Cleared;
+            _service.Cleared += Service_Cleared;
+            _service.CountChanged += Service_CountChanged;
         }
 
         #endregion
@@ -63,7 +63,7 @@ namespace Appysights.ViewModels
         {
             _service.Cleared -= this.Service_Cleared;
             _service.BusyChanged -= this.Service_BusyChanged;
-            _service.NewEvent -= this.Service_NewEvent;
+            _service.CountChanged -= Service_CountChanged;
         }
 
         private void Service_NewEvent(object sender, Models.AppInsightEvent e)
@@ -82,6 +82,11 @@ namespace Appysights.ViewModels
         private void Service_BusyChanged(object sender, bool e)
         {
             IsBusy = e;
+        }
+
+        private void Service_CountChanged(object sender, int e)
+        {
+            NotifyOfPropertyChange(() => ErrorCountValue);
         }
 
         #endregion

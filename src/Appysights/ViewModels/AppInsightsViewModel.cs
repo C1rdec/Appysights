@@ -216,7 +216,7 @@ namespace Appysights.ViewModels
                 return;
             }
 
-            Events.Insert(0, new EventTileViewModel(e, _position));
+            Events.Insert(0, new EventTileViewModel(e, _position, RemoveEvent));
         }
 
         private void DisplayNextPage()
@@ -229,7 +229,7 @@ namespace Appysights.ViewModels
             var eventToDisplay = _currentEvents.Skip(_pageIndex * _pageSize).Take(_pageSize);
             foreach (var appInsightEvent in eventToDisplay)
             {
-                Events.Add(new EventTileViewModel(appInsightEvent, _position));
+                Events.Add(new EventTileViewModel(appInsightEvent, _position, RemoveEvent));
             }
 
             _pageIndex++;
@@ -241,6 +241,12 @@ namespace Appysights.ViewModels
             Events.Clear();
 
             _pageIndex = 0;
+        }
+
+        private void RemoveEvent(EventTileViewModel viewModel)
+        {
+            _service.Remove(viewModel.Event);
+            Events.Remove(viewModel);
         }
 
         #endregion
