@@ -73,6 +73,15 @@ namespace Appysights.ViewModels
             if (Selected || _skipMainAction)
             {
                 _skipMainAction = false;
+
+                if (Selected)
+                {
+                    IoC.Get<IEventAggregator>().PublishOnUIThreadAsync(new DashboardMessage(Close)
+                    {
+                        RequestClose = true,
+                    }); 
+                }
+
                 return;
             }
 

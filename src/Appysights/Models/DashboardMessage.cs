@@ -17,6 +17,8 @@ namespace Appysights.Models
 
         #region Properties
 
+        public bool RequestClose { get; set; }
+
         public Position Position { get; set; }
 
         public MicroService MicroService { get; set; }

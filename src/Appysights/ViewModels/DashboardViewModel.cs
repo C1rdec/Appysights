@@ -110,6 +110,13 @@ namespace Appysights.ViewModels
                 _lastMessage.CloseCallback?.Invoke();
             }
 
+            if (message.RequestClose)
+            {
+                _flyoutService.Close();
+                message.CloseCallback();
+                return Task.CompletedTask;
+            }
+
             _lastMessage = message;
             if (message.MicroService != null)
             {
