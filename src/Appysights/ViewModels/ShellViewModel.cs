@@ -50,7 +50,7 @@ namespace Appysights.ViewModels
 
             var viewModels = manager.Configurations.Select(c => new DashboardViewModel(c.Entity));
             Menu = new HamburgerSelectorViewModel(viewModels, OnMenuClick, manager);
-
+            Menu.PropertyChanged +=Menu_PropertyChanged;
             if (viewModels.Any())
             {
                 CurrentView = viewModels.FirstOrDefault();
@@ -64,11 +64,19 @@ namespace Appysights.ViewModels
             DisplayName = string.Empty;
         }
 
+        private void Menu_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "IsVisible")
+            {
+                NotifyOfPropertyChange(() => MenuVisible);
+            }
+        }
+
         #endregion
 
         #region Properties
 
-        public PropertyChangedBase Menu { get; set; }
+        public HamburgerSelectorViewModel Menu { get; set; }
 
         public object CurrentView { get; set; }
 
@@ -151,6 +159,8 @@ namespace Appysights.ViewModels
         }
 
         public bool UpToDate => !NeedUpdate;
+
+        public bool MenuVisible => Menu.IsVisible;
 
         #endregion
 

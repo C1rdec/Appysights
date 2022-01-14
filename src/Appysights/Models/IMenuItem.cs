@@ -6,6 +6,6 @@
 
         public string Title { get; }
 
-        public IconPack Icon { get; }
+        public object Icon { get; }
     }
 }

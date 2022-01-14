@@ -21,6 +21,6 @@
 
         public string Title => _title;
 
-        public IconPack Icon => null;
+        public object Icon => null;
     }
 }

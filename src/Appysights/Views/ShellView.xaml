@@ -68,7 +68,7 @@
             <ColumnDefinition Width="48*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Button BorderThickness="0" x:Name="CloseFlyout" IsCancel="true" Width="0" Height="0"/>
-        
+
         <!--This Grid is to set the Flyout Width-->
         <Grid x:Name="FlyoutWidth"/>
         <ContentControl x:Name="CurrentView" Margin="50,0,0,0" Grid.ColumnSpan="2"/>

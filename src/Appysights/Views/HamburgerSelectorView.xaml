@@ -57,7 +57,7 @@
     <Grid>
         <Controls:HamburgerMenu
             IsPaneOpen="{Binding IsOpen}"
-           Visibility="{Binding Multiple, Converter={StaticResource BooleanToVisibilityConverter}}"
+           Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
            x:Name="Menu" 
            DisplayMode="CompactOverlay" 
            SelectedItem="{Binding SelectedItem, Converter={StaticResource SelectedItemConverter}}"
@@ -91,5 +91,6 @@
             </Controls:HamburgerMenu.OptionsItemsSource>-->
 
         </Controls:HamburgerMenu>
+        <Grid Width="50"></Grid>
     </Grid>
 </UserControl>

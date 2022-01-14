@@ -17,6 +17,7 @@ namespace Appysights.ViewModels
 
         public HamburgerSelectorViewModel(IEnumerable<IMenuItem> items, Action<IMenuItem> onClick, ConfigurationManager manager)
         {
+            _manager = manager;
             _onClick = onClick;
             Items = new ObservableCollection<IMenuItem>(items);
             //OptionItems = new ObservableCollection<IMenuItem>(new List<IMenuItem>() { new MenuItem("Option") });
@@ -28,6 +29,7 @@ namespace Appysights.ViewModels
         {
             Items.Add(new DashboardViewModel(e.Entity));
             NotifyOfPropertyChange(() => Items);
+            NotifyOfPropertyChange(() => IsVisible);
         }
 
         public bool IsOpen
@@ -43,6 +45,8 @@ namespace Appysights.ViewModels
                 NotifyOfPropertyChange();
             }
         }
+
+        public bool IsVisible => true; /*_manager.Configurations.Count() >= 2;*/
 
         public ObservableCollection<IMenuItem> Items { get; set; }
 

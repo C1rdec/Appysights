@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Appysights.Models;
 using Appysights.Services;
 using Caliburn.Micro;
+using MahApps.Metro.IconPacks;
 
 namespace Appysights.ViewModels
 {
@@ -70,7 +71,7 @@ namespace Appysights.ViewModels
 
         public string Title => _configuration.Name;
 
-        public IconPack Icon => null;
+        public object Icon => null;/*new PackIconFontAwesome() { Kind = PackIconFontAwesomeKind.BugSolid };*/
 
         #endregion
 

@@ -7,6 +7,7 @@ namespace Appysights.Services
     public class ConfigurationManager : AppdataServiceBase<object>
     {
         public static string ConfigurationFolderName = "Configurations";
+        public static string OldConfigurationName = "Services.json";
 
         private List<ConfigurationService> _configurations;
 
@@ -14,6 +15,7 @@ namespace Appysights.Services
         {
             _configurations = new List<ConfigurationService>();
         }
+
         public event EventHandler<ConfigurationService> NewConfiguration;
 
 
@@ -31,6 +33,12 @@ namespace Appysights.Services
             if (!Directory.Exists(configFolderPath))
             {
                 Directory.CreateDirectory(configFolderPath);
+            }
+
+            var oldFilePath = Path.Combine(FolderPath, OldConfigurationName);
+            if (File.Exists(oldFilePath))
+            {
+                File.Move(oldFilePath, Path.Combine(configFolderPath, OldConfigurationName));
             }
 
             var files = Directory.GetFiles(Path.Combine(FolderPath, ConfigurationFolderName));
