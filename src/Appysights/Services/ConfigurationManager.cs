@@ -64,6 +64,7 @@ namespace Appysights.Services
                 oldConfig.Initialize();
                 oldConfig.Entity.Name = "Micro Services";
                 oldConfig.Save();
+                File.Delete(oldFilePath);
             }
         }
 
