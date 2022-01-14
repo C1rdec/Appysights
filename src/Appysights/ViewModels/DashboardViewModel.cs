@@ -68,8 +68,6 @@ namespace Appysights.ViewModels
 
         public bool HasStatusbarConfiguration => HasConfiguration && _configuration.Statusbar != null;
 
-        public string Label => "Label";
-
         public string Title => _configuration.Name;
 
         public object Icon => string.IsNullOrEmpty(_configuration.Icon) ? BuildDefaultIcon() : BuildIcon(_configuration.Icon);
