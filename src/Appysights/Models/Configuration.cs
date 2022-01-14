@@ -15,6 +15,8 @@ namespace Appysights.Models
 
         #region Properties
 
+        public string Name { get; set; }
+
         public IEnumerable<MicroServiceConfiguration> Services { get; set; }
 
         public AppInsightsConfiguration Statusbar { get; set; }

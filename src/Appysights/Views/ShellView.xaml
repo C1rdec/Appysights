@@ -12,8 +12,7 @@
                       xmlns:local="clr-namespace:Appysights"
                       xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
                       Dialog:DialogParticipation.Register="{Binding}"
-                      Title="Appysights" 
-                      MinWidth="800" MinHeight="500"
+                      MinWidth="840" MinHeight="500"
                       Height="450" Width="800">
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>
@@ -50,11 +49,12 @@
     <Controls:MetroWindow.Flyouts>
         <Controls:FlyoutsControl Focusable="False" KeyboardNavigation.TabNavigation="None">
             <Controls:Flyout Header="{Binding FlyoutHeader}"
+                             x:Name="MyFlyout"
                              KeyboardNavigation.TabNavigation="None"
                              Focusable="False"
                              IsOpen="{Binding FlyoutOpen}" 
-                             Position="{Binding FlyoutPosition}"
-                             Width="{Binding ActualWidth, ElementName=FlyoutWidth}">
+                             Width="{Binding ActualWidth, ElementName=FlyoutWidth}"
+                             Position="{Binding FlyoutPosition}">
                 <ContentControl cal:View.Model="{Binding Path=FlyoutContent,Mode=OneWay}"/>
             </Controls:Flyout>
         </Controls:FlyoutsControl>
@@ -64,13 +64,14 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="52*"></ColumnDefinition>
+            <ColumnDefinition Width="48*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Button BorderThickness="0" x:Name="CloseFlyout" IsCancel="true" Width="0" Height="0"/>
         
         <!--This Grid is to set the Flyout Width-->
         <Grid x:Name="FlyoutWidth"/>
-        <ContentControl x:Name="CurrentView" Grid.ColumnSpan="2" Margin="0,5,0,0"/>
+        <ContentControl x:Name="CurrentView" Margin="50,0,0,0" Grid.ColumnSpan="2"/>
+        <ContentControl x:Name="Menu" Margin="0,-30,0,0"/>
     </Grid>
 </Controls:MetroWindow>

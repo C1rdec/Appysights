@@ -5,12 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Appysights.Views" 
              xmlns:System="clr-namespace:System;assembly=netstandard"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <System:Double x:Key="ButtonMargin">100</System:Double>
     </UserControl.Resources>
     <Grid>
+        <TextBlock x:Name="DashboardName" Foreground="White" Margin="8,-30,0,0" FontSize="20" FontWeight="Light" Background="Transparent" IsHitTestVisible="False">Name</TextBlock>
         <Grid Visibility="{Binding HasConfiguration, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
@@ -22,24 +23,24 @@
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Grid Grid.ColumnSpan="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <ItemsControl x:Name="MicroServices">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel HorizontalAlignment="Center" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+                <Grid Grid.Column="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
-                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <ItemsControl x:Name="MicroServices">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel HorizontalAlignment="Center" />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                    </ItemsControl>
-                    <Grid Grid.Column="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Button x:Name="Clear" 
+                    <Button x:Name="Clear" 
                                 Focusable="False" 
                                 Width="15"
                                 Grid.Column="2"
@@ -49,7 +50,7 @@
                                 VerticalAlignment="Top" 
                                 BorderThickness="0"/>
 
-                        <Button x:Name="GetLastHour" 
+                    <Button x:Name="GetLastHour" 
                                 Focusable="False"
                                 Grid.Row="1" 
                                 Grid.Column="0"
@@ -59,7 +60,7 @@
                                 Cursor="Hand" 
                                 BorderBrush="{DynamicResource MahApps.Brushes.Gray9}"
                                 VerticalAlignment="Top">1H</Button>
-                        <Button x:Name="GetLast24Hour" 
+                    <Button x:Name="GetLast24Hour" 
                                 Focusable="False"
                                 Grid.Row="1" 
                                 Grid.Column="1" 
@@ -69,19 +70,10 @@
                                 Cursor="Hand" 
                                 BorderBrush="{DynamicResource MahApps.Brushes.Gray9}"
                                 VerticalAlignment="Top">24H</Button>
-                    </Grid>
                 </Grid>
+            </Grid>
             <ContentControl x:Name="SelectedMicroService" Grid.Row="1" Grid.ColumnSpan="2"/>
             <ContentControl x:Name="Statusbar" Grid.Row="2" Height="23" Grid.ColumnSpan="2" Visibility="{Binding HasStatusbarConfiguration, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         </Grid>
-
-        <Button 
-            x:Name="ImportConfiguration"
-            Visibility="{Binding HasNoConfiguration, Converter={StaticResource BooleanToVisibilityConverter}}"
-            Cursor="Hand"
-            FontSize="30"
-            Padding="10"
-            HorizontalAlignment="Center" 
-            VerticalAlignment="Center">Select Configuration</Button>
     </Grid>
 </UserControl>

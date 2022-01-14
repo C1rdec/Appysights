@@ -9,7 +9,7 @@ using Caliburn.Micro;
 
 namespace Appysights.ViewModels
 {
-    public class DashboardViewModel : PropertyChangedBase, IHandle<DashboardMessage>, IHandle<ConfigChangedMessage>
+    public class DashboardViewModel : PropertyChangedBase, IHandle<DashboardMessage>, IHandle<ConfigChangedMessage>, IMenuItem
     {
         #region Fields
 
@@ -18,21 +18,24 @@ namespace Appysights.ViewModels
         private MicroServiceViewModel _selectedMicro;
         private DashboardMessage _lastMessage;
         private FlyoutService _flyoutService;
-        private ConfigurationService _configurationService;
+        private Configuration _configuration;
         private KeyboardService _keyboardService;
+        private IEventAggregator _eventAggregator;
 
         #endregion
 
         #region Constructors
 
-        public DashboardViewModel(ConfigurationService configurationService, IEventAggregator eventAggregator, FlyoutService flyoutService, KeyboardService keyboardService)
+        public DashboardViewModel(Configuration configuration)
         {
-            _configurationService = configurationService;
-            _flyoutService = flyoutService;
-            _keyboardService = keyboardService;
+            _configuration = configuration;
+            _flyoutService = IoC.Get<FlyoutService>();
+            _keyboardService = IoC.Get<KeyboardService>(); ;
             _services = new List<MicroService>();
+            _eventAggregator = IoC.Get<IEventAggregator>();
+
             _flyoutService.FlyoutClosed += FlyoutService_FlyoutClosed;
-            eventAggregator.SubscribeOnPublishedThread(this);
+            _eventAggregator.SubscribeOnPublishedThread(this);
 
             Initialize();
         }
@@ -41,6 +44,8 @@ namespace Appysights.ViewModels
         #endregion
 
         #region Properties
+
+        public string DashboardName => _configuration.Name;
 
         public ObservableCollection<MicroServiceViewModel> MicroServices { get; set; }
 
@@ -52,26 +57,24 @@ namespace Appysights.ViewModels
         {
             get
             {
-                var configuration = _configurationService.Entity;
+                var configuration = _configuration;
                 return configuration.Services.Any() || configuration.Statusbar != null;
             }
         }
 
         public bool HasNoConfiguration => !HasConfiguration;
 
-        public bool HasStatusbarConfiguration => HasConfiguration && _configurationService.Entity.Statusbar != null;
+        public bool HasStatusbarConfiguration => HasConfiguration && _configuration.Statusbar != null;
+
+        public string Label => "Label";
+
+        public string Title => _configuration.Name;
+
+        public IconPack Icon => null;
 
         #endregion
 
         #region Methods
-
-        public void ImportConfiguration()
-        {
-            _configurationService.Import(() => 
-            {
-                Initialize();
-            });
-        }
 
         public void Clear()
         {
@@ -203,7 +206,7 @@ namespace Appysights.ViewModels
         private void InitializeServices()
         {
             MicroServices = new ObservableCollection<MicroServiceViewModel>();
-            foreach (var config in _configurationService.Entity.Services)
+            foreach (var config in _configuration.Services)
             {
                 var micro = new MicroService(config);
                 _services.Add(micro);
@@ -218,7 +221,7 @@ namespace Appysights.ViewModels
 
         private void InitializeStatusbar()
         {
-            var statusbarConfiguration = _configurationService.Entity.Statusbar;
+            var statusbarConfiguration = _configuration.Statusbar;
             if (statusbarConfiguration == null)
             {
                 Statusbar = null;

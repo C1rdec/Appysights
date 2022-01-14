@@ -11,5 +11,20 @@ namespace Appysights.Views
         {
             InitializeComponent();
         }
+
+        public void SetFlyoutWidth(Position position)
+        {
+            // Call me magic!
+            MyFlyout.Width = FlyoutWidth.ActualWidth;
+            if (position == Position.Right)
+            {
+                MyFlyout.Width -= 25;
+            }
+
+            if (position == Position.Left)
+            {
+                MyFlyout.Width += 6;
+            }
+        }
     }
 }

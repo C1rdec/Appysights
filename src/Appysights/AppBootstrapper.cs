@@ -12,6 +12,7 @@ namespace Appysights
 
         private SimpleContainer _container;
         private UpdateManagerService _updateManager;
+        private ConfigurationManager _configurationManager;
 
         #endregion
 
@@ -22,6 +23,8 @@ namespace Appysights
         /// </summary>
         public AppBootstrapper()
         {
+            _configurationManager = new ConfigurationManager();
+            _configurationManager.Initialize();
             _updateManager = new UpdateManagerService();
             _updateManager.HandleSquirrel();
             Initialize();
@@ -52,14 +55,16 @@ namespace Appysights
             _container.Singleton<ThemeService, ThemeService>(); 
             _container.Singleton<KeyboardService, KeyboardService>();
             _container.Singleton<SettingsViewModel, SettingsViewModel>();
-            _container.Singleton<DashboardViewModel, DashboardViewModel>();
+            _container.Singleton<HamburgerSelectorViewModel, HamburgerSelectorViewModel>();
             _container.Singleton<SplashScreenViewModel, SplashScreenViewModel>();
             _container.Singleton<IWindowManager, WindowManager>();
-            _container.Singleton<ConfigurationService, ConfigurationService>();
             _container.Singleton<IEventAggregator, EventAggregator>();
 
             _container.PerRequest<DialogService, DialogService>();
             _container.PerRequest<ShellViewModel, ShellViewModel>();
+
+
+            _container.Instance(_configurationManager);
 
             _container.Instance(Application);
             _container.Instance(_updateManager);

@@ -13,6 +13,14 @@ namespace Appysights.Services
         public AppdataServiceBase()
         {
             Entity = new TEntity();
+        }
+
+        #endregion
+
+        #region Methods
+
+        public virtual void Initialize()
+        {
             if (!Directory.Exists(this.FolderPath))
             {
                 Directory.CreateDirectory(this.FolderPath);
@@ -45,11 +53,13 @@ namespace Appysights.Services
 
         protected abstract string FileName { get; }
 
+        protected virtual string SubFolderName => string.Empty;
+
         protected virtual string ImportFileExtension => ".txt";
 
         protected string FilePath => Path.Combine(FolderPath, FileName);
 
-        protected string FolderPath => Path.Combine(AppDataFolderPath, FolderName);
+        protected string FolderPath => Path.Combine(AppDataFolderPath, FolderName, SubFolderName?.Trim() ?? string.Empty);
 
         private string FolderName => "Appysights";
 
@@ -65,8 +75,19 @@ namespace Appysights.Services
 
         public void Save(TEntity entity)
         {
+            var name = string.Empty;
+            var nameProperty = entity.GetType().GetProperty("Name");
+            if (nameProperty != null)
+            {
+                var oName = nameProperty.GetValue(entity);
+                name = oName as string;
+            }
+
+            var filePath = string.IsNullOrEmpty(name) ? FilePath: Path.Combine(FolderPath, name);
+
+            HandleSubFolder();
             var jsonValue = JsonSerializer.Serialize(entity, new JsonSerializerOptions { WriteIndented = true });
-            File.WriteAllText(FilePath, jsonValue);
+            File.WriteAllText(filePath, jsonValue);
 
             Entity = entity;
         }
@@ -86,7 +107,7 @@ namespace Appysights.Services
                 {
                     var text = File.ReadAllText(dialog.FileName);
                     Save(text);
-                    onSuccess();
+                    onSuccess?.Invoke();
                 }
             }
             catch
@@ -99,6 +120,20 @@ namespace Appysights.Services
         protected T Deserialize<T>(string json)
         {
             return JsonSerializer.Deserialize<T>(json);
+        }
+
+        private void HandleSubFolder()
+        {
+            if (string.IsNullOrEmpty(SubFolderName))
+            {
+                return;
+            }
+
+            var path = Path.Combine(FolderPath);
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
         }
 
         #endregion

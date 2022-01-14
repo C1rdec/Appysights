@@ -11,7 +11,7 @@ namespace Appysights.ViewModels
         #region Fields
 
         private ThemeService _themeService;
-        private ConfigurationService _configurationService;
+        private ConfigurationManager _configurationManager;
         private Scheme _selectedScheme;
         private Theme _selectedTheme;
         private IEventAggregator _eventAggregator;
@@ -20,10 +20,10 @@ namespace Appysights.ViewModels
 
         #region Constructors
 
-        public SettingsViewModel(ThemeService themeService, ConfigurationService configurationService, IEventAggregator eventAggregator)
+        public SettingsViewModel(ThemeService themeService, ConfigurationManager configurationManager, IEventAggregator eventAggregator)
         {
             _themeService = themeService;
-            _configurationService = configurationService;
+            _configurationManager = configurationManager;
             _selectedScheme = themeService.Scheme;
             _selectedTheme = themeService.Theme;
             _eventAggregator = eventAggregator;
@@ -70,9 +70,9 @@ namespace Appysights.ViewModels
 
         #region Methods
 
-        public void ChangeConfig()
+        public void AddConfig()
         {
-            _configurationService.Import(() => 
+            _configurationManager.Add(() => 
             {
                 _eventAggregator.PublishOnUIThreadAsync(ConfigChangedMessage.Default);
             });

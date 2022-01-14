@@ -10,6 +10,8 @@
                     <local:AppBootstrapper x:Key="bootstrapper" />
                     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
                     <converters:DateToOffsetConverter x:Key="DateToColorConverter"/>
+                    <converters:HamuburgerMenuItemConverter x:Key="HamuburgerMenuItemConverter"/>
+                    <converters:SelectedItemConverter x:Key="SelectedItemConverter"/>
                 </ResourceDictionary>
                 
                 <!--Busy Indicator-->

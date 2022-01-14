@@ -17,8 +17,15 @@ namespace Appysights.Services
 
         #region Methods
 
+        public Position CurrentPosition { get; private set; }
+
+        #endregion
+
+        #region Methods
+
         public void Show(string header, PropertyChangedBase content, Position position)
         {
+            CurrentPosition = position;
             var request = new FlyoutRequest
             {
                 Header = header,

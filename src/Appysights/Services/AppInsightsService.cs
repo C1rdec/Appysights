@@ -174,7 +174,7 @@ namespace Appysights.Services
             if (_events.Any(e => e.Id == appInsightEvent.Id))
             {
                 return;
-            }
+            }   
 
             this._events.Add(appInsightEvent);
             NewEvent?.Invoke(this, appInsightEvent);

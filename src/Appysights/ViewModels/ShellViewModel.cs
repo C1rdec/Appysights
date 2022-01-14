@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Appysights.Models;
 using Appysights.Services;
+using Appysights.Views;
 using Caliburn.Micro;
 using MahApps.Metro.Controls;
 
@@ -12,6 +14,7 @@ namespace Appysights.ViewModels
     {
         #region Fields
 
+        private ShellView _view;
         private bool _flyoutOpen;
         private bool _needUpdate;
         private string _flyoutHeader;
@@ -21,19 +24,21 @@ namespace Appysights.ViewModels
         private KeyboardService _keyboardService;
         private UpdateManagerService _updateManagerService;
         private DialogService _dialogService;
+        private ConfigurationManager _manager;
 
         #endregion
 
         #region Constructors
 
         public ShellViewModel(
-            DashboardViewModel dashboard, 
+            ConfigurationManager manager,
             FlyoutService flyoutService, 
             ThemeService themeService, 
             KeyboardService keyboardService, 
             UpdateManagerService updateManagerSerivce,
             DialogService dialogService)
         {
+            _manager = manager;
             _updateManagerService = updateManagerSerivce;
             _flyoutService = flyoutService;
             _keyboardService = keyboardService;
@@ -43,15 +48,29 @@ namespace Appysights.ViewModels
             _flyoutService.ShowFlyoutRequested += FlyoutService_ShowFlyout;
             _flyoutService.CloseFlyoutRequested += FlyoutService_CloseFlyout;
 
-            CurrentView = dashboard;
+            var viewModels = manager.Configurations.Select(c => new DashboardViewModel(c.Entity));
+            Menu = new HamburgerSelectorViewModel(viewModels, OnMenuClick, manager);
+
+            if (viewModels.Any())
+            {
+                CurrentView = viewModels.FirstOrDefault();
+            }
+            else
+            {
+                CurrentView = new ConfigurationSelectorViewModel(manager, OnNewConfiguration);
+            }
+
             themeService.Apply();
+            DisplayName = string.Empty;
         }
 
         #endregion
 
         #region Properties
 
-        public PropertyChangedBase CurrentView { get; set; }
+        public PropertyChangedBase Menu { get; set; }
+
+        public object CurrentView { get; set; }
 
         public StatusbarViewModel Statusbar { get; set; }
 
@@ -176,6 +195,7 @@ namespace Appysights.ViewModels
 
         protected override async void OnViewLoaded(object view)
         {
+            _view = view as ShellView;
             NeedUpdate = await _updateManagerService.CheckForUpdate();
             if (!NeedUpdate)
             {
@@ -194,6 +214,12 @@ namespace Appysights.ViewModels
 
         private void FlyoutService_ShowFlyout(object sender, FlyoutRequest e)
         {
+            if (Menu != null)
+            {
+                // need to remove the width of the menu
+                _view.SetFlyoutWidth(e.Position);
+            }
+
             ShowFlyout(e.Header, e.Content, e.Position);
         }
 
@@ -209,9 +235,21 @@ namespace Appysights.ViewModels
             {
                 await _updateManagerService.Update();
             }
-            else
+        }
+
+        private void OnMenuClick(object t)
+        {
+            CurrentView = t;
+            NotifyOfPropertyChange(() => CurrentView);
+        }
+
+        private void OnNewConfiguration()
+        {
+            var firstConfig = _manager.Configurations.FirstOrDefault();
+            if (firstConfig != null)
             {
-                needUpdate = false;
+                CurrentView = new DashboardViewModel(firstConfig.Entity);
+                NotifyOfPropertyChange(() => CurrentView);
             }
         }
 

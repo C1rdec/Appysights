@@ -23,11 +23,11 @@
                             Data="{x:Static local:IconPackData.Party}"/>
         </Button>
         <TextBlock HorizontalAlignment="Right" 
-                   cal:Message.Attach="[Event MouseDown] = [Action ChangeConfig()]"
+                   cal:Message.Attach="[Event MouseDown] = [Action AddConfig()]"
                    VerticalAlignment="Bottom" 
                    Cursor="Hand"
                    Foreground="{DynamicResource MahApps.Brushes.Accent}" 
                    Grid.Row="2"
-                   Margin="0,0,0,10">Change Config</TextBlock>
+                   Margin="0,0,0,10">Add Configuration</TextBlock>
     </Grid>
 </UserControl>
