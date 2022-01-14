@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
@@ -71,7 +72,7 @@ namespace Appysights.ViewModels
 
         public string Title => _configuration.Name;
 
-        public object Icon => null;/*new PackIconFontAwesome() { Kind = PackIconFontAwesomeKind.BugSolid };*/
+        public object Icon => string.IsNullOrEmpty(_configuration.Icon) ? BuildDefaultIcon() : BuildIcon(_configuration.Icon);
 
         #endregion
 
@@ -133,6 +134,25 @@ namespace Appysights.ViewModels
             }
 
             return Task.CompletedTask;
+        }
+
+        private static object BuildDefaultIcon() => BuildIcon(PackIconMaterialKind.MicrosoftAzure);
+
+        private static object BuildIcon(string kindValue)
+        {
+            if(Enum.TryParse<PackIconMaterialKind>(kindValue, out var icon))
+            {
+                return BuildIcon(icon);
+            }
+            else
+            {
+                return BuildDefaultIcon();
+            }
+        }
+
+        private static object BuildIcon(PackIconMaterialKind kind)
+        {
+            return new PackIconMaterial() { Kind = kind, Width = 30, Height = 30 };
         }
 
         private void KeyboardService_LeftPressed(object sender, System.EventArgs e)

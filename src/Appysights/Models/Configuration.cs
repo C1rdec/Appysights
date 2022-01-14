@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using MahApps.Metro.IconPacks;
 
 namespace Appysights.Models
 {
@@ -20,6 +21,8 @@ namespace Appysights.Models
         public IEnumerable<MicroServiceConfiguration> Services { get; set; }
 
         public AppInsightsConfiguration Statusbar { get; set; }
+
+        public string Icon { get; set; }
 
         #endregion
     }
