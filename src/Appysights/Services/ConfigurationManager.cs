@@ -21,7 +21,7 @@ namespace Appysights.Services
 
         public IEnumerable<ConfigurationService> Configurations => _configurations;
 
-        protected override string FileName => "manager.json";
+        protected override string FileName => "Manager.json";
 
         #region Methods
 
@@ -35,11 +35,7 @@ namespace Appysights.Services
                 Directory.CreateDirectory(configFolderPath);
             }
 
-            var oldFilePath = Path.Combine(FolderPath, OldConfigurationName);
-            if (File.Exists(oldFilePath))
-            {
-                File.Move(oldFilePath, Path.Combine(configFolderPath, OldConfigurationName));
-            }
+            HandleMigration(configFolderPath);
 
             var files = Directory.GetFiles(Path.Combine(FolderPath, ConfigurationFolderName));
             foreach (var file in files)
@@ -57,6 +53,18 @@ namespace Appysights.Services
             config.Import(onSuccess);
             _configurations.Add(config);
             NewConfiguration?.Invoke(this, config);
+        }
+
+        private void HandleMigration(string configFolderPath)
+        {
+            var oldFilePath = Path.Combine(FolderPath, OldConfigurationName);
+            if (File.Exists(oldFilePath))
+            {
+                var oldConfig = new ConfigurationService(oldFilePath);
+                oldConfig.Initialize();
+                oldConfig.Entity.Name = "Micro Services";
+                oldConfig.Save();
+            }
         }
 
         #endregion
