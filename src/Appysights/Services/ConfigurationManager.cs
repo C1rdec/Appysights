@@ -63,6 +63,7 @@ namespace Appysights.Services
                 var oldConfig = new ConfigurationService(oldFilePath);
                 oldConfig.Initialize();
                 oldConfig.Entity.Name = "Micro Services";
+                oldConfig.Entity.Icon = "Git";
                 oldConfig.Save();
                 File.Delete(oldFilePath);
             }
