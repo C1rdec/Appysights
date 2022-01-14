@@ -20,7 +20,7 @@ namespace Appysights.ViewModels
             _manager = manager;
             _onClick = onClick;
             Items = new ObservableCollection<IMenuItem>(items);
-            //OptionItems = new ObservableCollection<IMenuItem>(new List<IMenuItem>() { new MenuItem("Option") });
+            OptionItems = new ObservableCollection<IMenuItem>(new List<IMenuItem>() { new MenuItem("New") });
             SelectedItem = Items.FirstOrDefault();
             manager.NewConfiguration += Manager_NewConfiguration;
         }
@@ -61,12 +61,18 @@ namespace Appysights.ViewModels
 
         public void MenuSelectionChanged(object value, ItemClickEventArgs args)
         {
-            var dashboard = args.ClickedItem as DashboardViewModel;
+            var dashboard = args.ClickedItem as IMenuItem;
             if (dashboard != null)
             {
                 _onClick?.Invoke(dashboard);
                 IsOpen = false;
             }
+        }
+
+        public void OptionMenuSelectionChanged(object value, ItemClickEventArgs args)
+        {
+            _manager.Add(null);
+            args.Handled = true;
         }
     }
 }

@@ -50,9 +50,14 @@ namespace Appysights.Services
         public void Add(Action onSuccess)
         {
             var config = new ConfigurationService(FileName);
-            config.Import(onSuccess);
+            config.Import(() => OnSuccess(onSuccess, config));
+        }
+
+        private void OnSuccess(Action onSuccess, ConfigurationService config)
+        {
             _configurations.Add(config);
             NewConfiguration?.Invoke(this, config);
+            onSuccess?.Invoke();
         }
 
         private void HandleMigration()
