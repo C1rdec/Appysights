@@ -13,6 +13,7 @@ namespace Appysights
         private SimpleContainer _container;
         private UpdateManagerService _updateManager;
         private ConfigurationManager _configurationManager;
+        private SettingsService _settingsService;
 
         #endregion
 
@@ -25,6 +26,8 @@ namespace Appysights
         {
             _configurationManager = new ConfigurationManager();
             _configurationManager.Initialize();
+            _settingsService = new SettingsService();
+            _settingsService.Initialize();
             _updateManager = new UpdateManagerService();
             _updateManager.HandleSquirrel();
             Initialize();
@@ -50,7 +53,6 @@ namespace Appysights
         protected override void Configure()
         {
             _container = new SimpleContainer();
-            _container.Singleton<SettingsService, SettingsService>();
             _container.Singleton<FlyoutService, FlyoutService>();
             _container.Singleton<ThemeService, ThemeService>(); 
             _container.Singleton<KeyboardService, KeyboardService>();
@@ -65,6 +67,7 @@ namespace Appysights
 
 
             _container.Instance(_configurationManager);
+            _container.Instance(_settingsService);
 
             _container.Instance(Application);
             _container.Instance(_updateManager);
