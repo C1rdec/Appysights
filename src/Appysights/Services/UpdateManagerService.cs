@@ -80,7 +80,7 @@ namespace Appysights.Services
                 _timer = null;
             }
 
-            _timer = new Timer(30000);
+            _timer = new Timer(TimeSpan.FromMinutes(5).TotalMilliseconds);
             _timer.Elapsed += Timer_Elapsed;
             _timer.Start();
         }
