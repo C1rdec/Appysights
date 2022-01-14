@@ -35,7 +35,7 @@ namespace Appysights.Services
                 Directory.CreateDirectory(configFolderPath);
             }
 
-            HandleMigration(configFolderPath);
+            HandleMigration();
 
             var files = Directory.GetFiles(Path.Combine(FolderPath, ConfigurationFolderName));
             foreach (var file in files)
@@ -55,7 +55,7 @@ namespace Appysights.Services
             NewConfiguration?.Invoke(this, config);
         }
 
-        private void HandleMigration(string configFolderPath)
+        private void HandleMigration()
         {
             var oldFilePath = Path.Combine(FolderPath, OldConfigurationName);
             if (File.Exists(oldFilePath))
