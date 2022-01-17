@@ -9,14 +9,15 @@ before_package:
 - pwsh: >-
     $version = (get-item ".\src\Appysights\bin\Release\net6.0-windows\Appysights.exe").VersionInfo | % {("{0}.{1}.{2}" -f $_.ProductMajorPart,$_.ProductMinorPart,$_.ProductBuildPart)};
 
+    Set-Alias ToolFolder ($env:USERPROFILE + "\.nuget\packages\clowd.squirrel\2.7.34-pre\tools\");
     Set-Alias Squirrel ($env:USERPROFILE + "\.nuget\packages\clowd.squirrel\2.7.34-pre\tools\Squirrel.exe");
     Squirrel pack --packName "Appysights" --packVersion $version --packAuthors "SYLC" --packDirectory ".\src\Appysights\bin\Release\net6.0-windows";
 after_build:
 - pwsh: Rename-Item -Path ".\Releases\Setup.exe" -NewName "AppLurkerSetup.exe"
 artifacts:
-- path: Releases\*.exe
-- path: Releases\*.nupkg
-- path: Releases\RELEASES
+- path: ToolFolder\Releases\*.exe
+- path: ToolFolder\Releases\*.nupkg
+- path: ToolFolder\Releases\RELEASES
 deploy:
 - provider: GitHub
   auth_token:
