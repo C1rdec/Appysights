@@ -12,11 +12,12 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <TextBlock x:Name="ApplicationName"/>
-        <Controls:ProgressRing 
-            Grid.Column="1" 
-            Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-            Height="5" Width="5"
-            IsActive="{Binding IsBusy}" />
+        <Viewbox Grid.Column="1" Height="15">
+            <Controls:ProgressRing 
+                Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                IsActive="{Binding IsBusy}" />
+        </Viewbox>
+
         <TextBlock x:Name="ErrorCountValue" 
                    Grid.Column="1" 
                    HorizontalAlignment="Center"
