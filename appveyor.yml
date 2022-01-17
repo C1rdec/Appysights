@@ -17,8 +17,3 @@ artifacts:
 - path: .\Releases\*.exe
 - path: .\Releases\*.nupkg
 - path: .\Releases\RELEASES
-deploy:
-- provider: GitHub
-  auth_token:
-    secure: kkPYVySvzbfT5BNnZ7x+IObebWn8ZTbiw/6sQtzhI4sS6zIV2cGmSmVVyIlOONAr
-  draft: true

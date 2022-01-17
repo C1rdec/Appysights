@@ -39,7 +39,7 @@
                     <TextBlock VerticalAlignment="Center" Margin="8,0,0,0">Update</TextBlock>
                 </StackPanel>
             </Button>
-            <Button Cursor="Hand" cal:Message.Attach="[Event Click] = [Action ShowReleasePage]">
+            <Button Cursor="Hand" cal:Message.Attach="[Event Click] = [Action ShowSettings]">
                 <Button.Content>
                     <TextBlock Text="{Binding Version}"/>
                 </Button.Content>
