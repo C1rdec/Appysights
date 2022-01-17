@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -167,6 +168,17 @@ namespace Appysights.ViewModels
         #endregion
 
         #region Methods
+
+        public void ShowReleasePage()
+        {
+            var targetURL = $"https://github.com/C1rdec/Appysights/releases/tag/v{Version}";
+            var psi = new ProcessStartInfo
+            {
+                FileName = targetURL,
+                UseShellExecute = true
+            };
+            Process.Start(psi);
+        }
 
         public void ShowSettings()
         {

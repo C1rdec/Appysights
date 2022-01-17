@@ -39,7 +39,7 @@
                     <TextBlock VerticalAlignment="Center" Margin="8,0,0,0">Update</TextBlock>
                 </StackPanel>
             </Button>
-            <Button Cursor="Hand">
+            <Button Cursor="Hand" cal:Message.Attach="[Event Click] = [Action ShowReleasePage]">
                 <Button.Content>
                     <TextBlock Text="{Binding Version}"/>
                 </Button.Content>
@@ -71,7 +71,7 @@
 
         <!--This Grid is to set the Flyout Width-->
         <Grid x:Name="FlyoutWidth"/>
-        <ContentControl x:Name="CurrentView" Margin="50,0,0,0" Grid.ColumnSpan="2"/>
+        <ContentControl x:Name="CurrentView" Margin="48,0,0,0" Grid.ColumnSpan="2"/>
         <ContentControl x:Name="Menu" Margin="0,-30,0,0"/>
     </Grid>
 </Controls:MetroWindow>
