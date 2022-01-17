@@ -61,6 +61,7 @@
     <Grid>
         <Controls:HamburgerMenu
            IsPaneOpen="{Binding IsOpen}"
+            SelectedIndex="0"
            Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
            x:Name="Menu" 
            DisplayMode="CompactOverlay" 

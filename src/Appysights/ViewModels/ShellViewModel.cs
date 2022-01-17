@@ -53,7 +53,9 @@ namespace Appysights.ViewModels
             Menu.PropertyChanged +=Menu_PropertyChanged;
             if (viewModels.Any())
             {
-                CurrentView = viewModels.FirstOrDefault();
+                var first = viewModels.FirstOrDefault();
+                first.Initialize();
+                CurrentView = first;
             }
             else
             {
