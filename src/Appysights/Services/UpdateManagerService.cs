@@ -74,10 +74,7 @@ namespace Appysights.Services
         {
             if (_timer != null)
             {
-                _timer.Stop();
-                _timer.Elapsed -=Timer_Elapsed;
-                _timer.Dispose();
-                _timer = null;
+                DisposeTimer();
             }
 
             _timer = new Timer(TimeSpan.FromMinutes(5).TotalMilliseconds);
@@ -91,7 +88,16 @@ namespace Appysights.Services
             if (needUpdate)
             {
                 UpdateRequested?.Invoke(this, EventArgs.Empty);
+                DisposeTimer();
             }
+        }
+
+        private void DisposeTimer()
+        {
+            _timer.Stop();
+            _timer.Elapsed -= Timer_Elapsed;
+            _timer.Dispose();
+            _timer = null;
         }
 
         private async void OnInstall(System.Version version)

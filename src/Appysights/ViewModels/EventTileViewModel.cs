@@ -107,6 +107,11 @@ namespace Appysights.ViewModels
             Execute.OnUIThread(() => 
             {
                 var view = GetView() as EventTileView;
+                if (view == null)
+                {
+                    return;
+                }
+
                 view.MainBorder.BringIntoView();
             });
 

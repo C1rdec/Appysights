@@ -34,13 +34,14 @@ namespace Appysights.ViewModels
             }
 
             Applications = viewModels;
+            HasEvents = Applications.Any(a => a.ErrorCount > 0);
         }
 
         private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "ErrorCountValue")
             {
-                this.HasEvents = Applications.Any(a => a.ErrorCount > 0);
+                HasEvents = Applications.Any(a => a.ErrorCount > 0);
             }
         }
 

@@ -28,6 +28,8 @@ namespace Appysights.Services
 
         #region Properties
 
+        public bool Silenced { get; set; }
+
         public AppInsightsService AppService => _appInsightsService;
 
         public string Name => _appInsightsService.Name;
@@ -39,6 +41,7 @@ namespace Appysights.Services
         private async Task InitializeCore()
         {
             var exceptions = await _appInsightsService.GetExceptionsFromToday();
+            _exceptions.Clear();
             _exceptions.AddRange(exceptions);
         }
 

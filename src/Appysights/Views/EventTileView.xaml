@@ -87,24 +87,53 @@
                         </Style.Triggers>
                     </Style>
                 </Border.Style>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock x:Name="SimpleDateTime"
-                           Foreground="White"
-                           FontSize="12" 
-                               VerticalAlignment="Center"
-                           Grid.Column="1" 
-                           FontWeight="Bold" 
-                           Margin="4,0,4,2" 
-                           HorizontalAlignment="Center"/>
-                    <TextBlock x:Name="Environment"
-                           Foreground="White"
-                           FontSize="15" 
-                           Grid.Column="1" 
-                           FontWeight="Bold" 
-                           Margin="4,0,4,2" 
-                           HorizontalAlignment="Center"/>
-                </StackPanel>
-
+                <Grid>
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel.Style>
+                            <Style TargetType="StackPanel">
+                                <Setter Property="Visibility" Value="Visible"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Border}, Path=IsMouseOver}" Value="True">
+                                        <Setter Property="Visibility" Value="Hidden"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <TextBlock x:Name="SimpleDateTime"
+                               Foreground="White"
+                               FontSize="12" 
+                                   VerticalAlignment="Center"
+                               Grid.Column="1" 
+                               FontWeight="Bold" 
+                               Margin="4,0,4,2" 
+                               HorizontalAlignment="Center"/>
+                        <TextBlock x:Name="Environment"
+                               Foreground="White"
+                               FontSize="15" 
+                               Grid.Column="1" 
+                               FontWeight="Bold" 
+                               Margin="4,0,4,2" 
+                               HorizontalAlignment="Center"/>
+                    </StackPanel>
+                    <Grid>
+                        <Grid.Style>
+                            <Style TargetType="Grid">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Border}, Path=IsMouseOver}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Grid.Style>
+                        <local:IconPack Foreground="White"
+                                        Margin="0,4,0,4"
+                                HorizontalAlignment="Center"
+                                Width="12"
+                                Data="{x:Static local:IconPackData.Delete}">
+                        </local:IconPack>
+                    </Grid>
+                </Grid>
             </Border>
         </Grid>
     </Border>

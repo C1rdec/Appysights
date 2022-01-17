@@ -11,7 +11,7 @@ using MahApps.Metro.IconPacks;
 
 namespace Appysights.ViewModels
 {
-    public class DashboardViewModel : PropertyChangedBase, IHandle<DashboardMessage>, IHandle<ConfigChangedMessage>, IMenuItem
+    public class DashboardViewModel : PropertyChangedBase, IHandle<DashboardMessage>, IHandle<ConfigChangedMessage>, IMenuItem, IResponsive
     {
         #region Fields
 
@@ -39,7 +39,19 @@ namespace Appysights.ViewModels
             _flyoutService.FlyoutClosed += FlyoutService_FlyoutClosed;
             _eventAggregator.SubscribeOnPublishedThread(this);
 
-            Initialize();
+            if (configuration.Statusbar != null)
+            {
+                _statusbarService = new StatusbarService(new AppInsightsService(configuration.Statusbar));
+            }
+
+            foreach (var config in _configuration.Services)
+            {
+                var micro = new MicroService(config);
+                _services.Add(micro);
+                micro.Watch();
+            }
+
+            MicroServices = new ObservableCollection<MicroServiceViewModel>();
         }
 
 
@@ -134,11 +146,46 @@ namespace Appysights.ViewModels
             return Task.CompletedTask;
         }
 
+        public void Initialize()
+        {
+            InitializeKeyboard();
+            InitializeServices();
+            InitializeStatusbar();
+
+            NotifyOfPropertyChange(() => HasConfiguration);
+            NotifyOfPropertyChange(() => HasNoConfiguration);
+            NotifyOfPropertyChange(() => HasStatusbarConfiguration);
+        }
+
+        public void Deactivate()
+        {
+            ClearSelection();
+
+            foreach(var micro in MicroServices)
+            {
+                micro.Dispose();
+            }
+
+            MicroServices.Clear();
+            _keyboardService.LeftPressed -= this.KeyboardService_LeftPressed;
+            _keyboardService.RightPressed -= this.KeyboardService_RightPressed;
+            _keyboardService.OnePressed -= this.KeyboardService_OnePressed;
+            _keyboardService.TwoPressed -= this.KeyboardService_TwoPressed;
+        }
+
+        private void InitializeKeyboard()
+        {
+            _keyboardService.LeftPressed += this.KeyboardService_LeftPressed;
+            _keyboardService.RightPressed += this.KeyboardService_RightPressed;
+            _keyboardService.OnePressed += this.KeyboardService_OnePressed;
+            _keyboardService.TwoPressed += this.KeyboardService_TwoPressed;
+        }
+
         private static object BuildDefaultIcon() => BuildIcon(PackIconMaterialKind.MicrosoftAzure);
 
         private static object BuildIcon(string kindValue)
         {
-            if(Enum.TryParse<PackIconMaterialKind>(kindValue, out var icon))
+            if (Enum.TryParse<PackIconMaterialKind>(kindValue, out var icon))
             {
                 return BuildIcon(icon);
             }
@@ -151,6 +198,24 @@ namespace Appysights.ViewModels
         private static object BuildIcon(PackIconMaterialKind kind)
         {
             return new PackIconMaterial() { Kind = kind, Width = 30, Height = 30 };
+        }
+
+        private void OnStatusBarClick()
+        {
+            _flyoutService.Close();
+            if (Statusbar.Selected)
+            {
+                ClearSelectedMicroService();
+
+                return;
+            }
+
+            if (_selectedMicro != null)
+            {
+                _selectedMicro.Selected = false;
+            }
+
+            HandleMicroService(new MicroService(_statusbarService.AppService));
         }
 
         private void KeyboardService_LeftPressed(object sender, System.EventArgs e)
@@ -193,25 +258,6 @@ namespace Appysights.ViewModels
             }
         }
 
-        private void Initialize()
-        {
-            InitializeKeyboard();
-            InitializeServices();
-            InitializeStatusbar();
-
-            NotifyOfPropertyChange(() => HasConfiguration);
-            NotifyOfPropertyChange(() => HasNoConfiguration);
-            NotifyOfPropertyChange(() => HasStatusbarConfiguration);
-        }
-
-        private void InitializeKeyboard()
-        {
-            _keyboardService.LeftPressed += this.KeyboardService_LeftPressed;
-            _keyboardService.RightPressed += this.KeyboardService_RightPressed;
-            _keyboardService.OnePressed += this.KeyboardService_OnePressed;
-            _keyboardService.TwoPressed += this.KeyboardService_TwoPressed;
-        }
-
         private void KeyboardService_TwoPressed(object sender, System.EventArgs e)
         {
             Execute.OnUIThread(() => GetLast24Hour());
@@ -224,15 +270,9 @@ namespace Appysights.ViewModels
 
         private void InitializeServices()
         {
-            MicroServices = new ObservableCollection<MicroServiceViewModel>();
-            foreach (var config in _configuration.Services)
+            foreach (var service in _services)
             {
-                var micro = new MicroService(config);
-                _services.Add(micro);
-
-                MicroServices.Add(new MicroServiceViewModel(micro, OnMicroServiceClick));
-
-                micro.Watch();
+                MicroServices.Add(new MicroServiceViewModel(service, OnMicroServiceClick));
             }
 
             NotifyOfPropertyChange(() => MicroServices);
@@ -240,36 +280,16 @@ namespace Appysights.ViewModels
 
         private void InitializeStatusbar()
         {
-            var statusbarConfiguration = _configuration.Statusbar;
-            if (statusbarConfiguration == null)
+            if (_statusbarService == null)
             {
                 Statusbar = null;
             }
             else
             {
-                _statusbarService = new StatusbarService(new AppInsightsService(statusbarConfiguration));
                 Statusbar = new StatusbarViewModel(_statusbarService, OnStatusBarClick);
             }
 
             this.NotifyOfPropertyChange(() => Statusbar);
-        }
-
-        public void OnStatusBarClick()
-        {
-            _flyoutService.Close();
-            if (Statusbar.Selected)
-            {
-                ClearSelectedMicroService();
-
-                return;
-            }
-
-            if (_selectedMicro != null)
-            {
-                _selectedMicro.Selected = false;
-            }
-
-            HandleMicroService(new MicroService(_statusbarService.AppService));
         }
 
         private void OnMicroServiceClick(MicroServiceViewModel viewModel)
@@ -335,7 +355,7 @@ namespace Appysights.ViewModels
 
         public Task HandleAsync(ConfigChangedMessage message, CancellationToken cancellationToken)
         {
-            Initialize();
+            //Initialize();
             return Task.CompletedTask;
         }
 

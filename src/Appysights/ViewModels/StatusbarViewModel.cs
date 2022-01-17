@@ -10,7 +10,6 @@ namespace Appysights.ViewModels
         private StatusbarService _service;
         private System.Action _onClick;
         private bool _selected;
-        private bool _silenced;
         private bool _notInitialize = true;
 
         #endregion
@@ -24,7 +23,7 @@ namespace Appysights.ViewModels
             service.InitializeAsync().ContinueWith(t =>
             {
                 NotInitialize = false;
-                NotifyOfPropertyChange(() => HasExceptions);
+                NotifyOfPropertyChange(() => HasExceptions); 
                 NotifyOfPropertyChange(() => HasExceptionsSilenced);
             });
         }
@@ -69,7 +68,7 @@ namespace Appysights.ViewModels
         {
             get
             {
-                if (_silenced)
+                if (_service.Silenced)
                 {
                     return false;
                 }
@@ -91,7 +90,7 @@ namespace Appysights.ViewModels
 
         public void Silence()
         {
-            _silenced = !_silenced;
+            _service.Silenced = !_service.Silenced;
             NotifyOfPropertyChange(() => HasExceptions);
             NotifyOfPropertyChange(() => HasExceptionsSilenced);
         }

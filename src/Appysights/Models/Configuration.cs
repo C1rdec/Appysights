@@ -24,6 +24,8 @@ namespace Appysights.Models
 
         public string Icon { get; set; }
 
+        public int Order { get; set; }
+
         #endregion
     }
 }

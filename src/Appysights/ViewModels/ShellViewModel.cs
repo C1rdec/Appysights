@@ -209,7 +209,7 @@ namespace Appysights.ViewModels
             NeedUpdate = await _updateManagerService.CheckForUpdate();
             if (!NeedUpdate)
             {
-                _updateManagerService.UpdateRequested +=UpdateManagerService_UpdateRequested;
+                _updateManagerService.UpdateRequested += UpdateManagerService_UpdateRequested;
                 _updateManagerService.Watch();
             }
 
@@ -247,9 +247,21 @@ namespace Appysights.ViewModels
             }
         }
 
-        private void OnMenuClick(object t)
+        private void OnMenuClick(IMenuItem t)
         {
+            if (t is IResponsive responsive)
+            {
+                responsive.Initialize();
+            }
+
+            if (CurrentView is IResponsive r)
+            {
+                r.Deactivate();
+            }
+
             CurrentView = t;
+            
+
             NotifyOfPropertyChange(() => CurrentView);
         }
 
