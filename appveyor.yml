@@ -9,7 +9,7 @@ before_package:
 - pwsh: >-
     $version = (get-item ".\src\Appysights\bin\Release\net6.0-windows\Appysights.exe").VersionInfo | % {("{0}.{1}.{2}" -f $_.ProductMajorPart,$_.ProductMinorPart,$_.ProductBuildPart)}
 
-    $env:USERPROFILE\.nuget\packages\Clowd.Squirrel\2.7.34-pre\tools pack --packName "Appysights" --packVersion $version --packAuthors "SYLC" --packDirectory ".\src\Appysights\bin\Release\net6.0-windows"
+    $env:USERPROFILE + "\.nuget\packages\Clowd.Squirrel\2.7.34-pre\tools pack --packName "Appysights" --packVersion $version --packAuthors "SYLC" --packDirectory ".\src\Appysights\bin\Release\net6.0-windows"
 after_build:
 - pwsh: Rename-Item -Path ".\Releases\Setup.exe" -NewName "AppLurkerSetup.exe"
 artifacts:
