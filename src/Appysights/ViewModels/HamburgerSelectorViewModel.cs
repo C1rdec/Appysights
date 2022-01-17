@@ -46,7 +46,7 @@ namespace Appysights.ViewModels
             }
         }
 
-        public bool IsVisible => true; /*_manager.Configurations.Count() >= 2;*/
+        public bool IsVisible => true;
 
         public ObservableCollection<IMenuItem> Items { get; set; }
 
@@ -54,7 +54,6 @@ namespace Appysights.ViewModels
 
         public IMenuItem SelectedItem { get; set; }
 
-        //public bool Multiple => Items.Count > 1;
         public bool Multiple => true;
 
         public bool Single => !Multiple;
