@@ -1,7 +1,7 @@
 version: 1.0.{build}
 configuration: Release
 before_build:
-- ps: dotnet restore
+- ps: nuget restore
 build:
   verbosity: minimal
 before_package:
