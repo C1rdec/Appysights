@@ -9,15 +9,17 @@ namespace Appysights.Models
 
         private string _title;
         private object _icon;
+        private Action _onClick;
 
         #endregion
 
         #region Constructors
 
-        public MenuItem(string title)
+        public MenuItem(string title, string icon, Action onClick)
         {
             _title = title;
-            _icon = BuildIcon("ShapeSquareRoundedPlus");
+            _icon = BuildIcon(icon);
+            _onClick = onClick;
         }
 
         #endregion
@@ -25,6 +27,8 @@ namespace Appysights.Models
         public string Title => _title;
 
         public object Icon => _icon;
+
+        public Action OnClick => _onClick;
 
         private static object BuildIcon(string kindValue)
         {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
@@ -48,10 +49,16 @@ namespace Appysights.ViewModels
 
             _flyoutService.ShowFlyoutRequested += FlyoutService_ShowFlyout;
             _flyoutService.CloseFlyoutRequested += FlyoutService_CloseFlyout;
+            _manager.NewConfiguration += Manager_NewConfiguration;
 
             var viewModels = manager.Configurations.Select(c => new DashboardViewModel(c.Entity));
-            Menu = new HamburgerSelectorViewModel(viewModels, OnMenuClick, manager);
-            Menu.PropertyChanged +=Menu_PropertyChanged;
+            var options = new List<IMenuItem>()
+            {
+                new MenuItem("New", "ShapeSquareRoundedPlus", AddNewConfiguration),
+                new MenuItem("Settings", "CogOutline", () => ShowSettings()),
+            };
+            Menu = new HamburgerSelectorViewModel(viewModels, options, OnMenuClick);
+            Menu.PropertyChanged += Menu_PropertyChanged;
             if (viewModels.Any())
             {
                 var first = viewModels.FirstOrDefault();
@@ -65,6 +72,16 @@ namespace Appysights.ViewModels
 
             themeService.Apply();
             DisplayName = string.Empty;
+        }
+
+        private void Manager_NewConfiguration(object sender, ConfigurationService e)
+        {
+            Menu.AddItem(new DashboardViewModel(e.Entity));
+        }
+
+        private void AddNewConfiguration()
+        {
+            _manager.Add(null);
         }
 
         private void Menu_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)

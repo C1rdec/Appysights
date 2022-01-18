@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Appysights.Models;
-using Appysights.Services;
 using Caliburn.Micro;
 using MahApps.Metro.Controls;
 
@@ -11,26 +10,27 @@ namespace Appysights.ViewModels
 {
     public class HamburgerSelectorViewModel : PropertyChangedBase
     {
-        private ConfigurationManager _manager;
+        #region Fields
+
         private Action<IMenuItem> _onClick;
         private bool _isOpen;
 
-        public HamburgerSelectorViewModel(IEnumerable<IMenuItem> items, Action<IMenuItem> onClick, ConfigurationManager manager)
+        #endregion
+
+        #region Constructors
+
+        public HamburgerSelectorViewModel(IEnumerable<IMenuItem> items, IEnumerable<IMenuItem> options, Action<IMenuItem> onClick)
         {
-            _manager = manager;
             _onClick = onClick;
             Items = new ObservableCollection<IMenuItem>(items);
-            OptionItems = new ObservableCollection<IMenuItem>(new List<IMenuItem>() { new MenuItem("New") });
+            OptionItems = new ObservableCollection<IMenuItem>(options);
             SelectedItem = Items.FirstOrDefault();
-            manager.NewConfiguration += Manager_NewConfiguration;
         }
 
-        private void Manager_NewConfiguration(object sender, ConfigurationService e)
-        {
-            Items.Add(new DashboardViewModel(e.Entity));
-            NotifyOfPropertyChange(() => Items);
-            NotifyOfPropertyChange(() => IsVisible);
-        }
+        #endregion
+
+        #region Properties
+
 
         public bool IsOpen
         {
@@ -58,20 +58,42 @@ namespace Appysights.ViewModels
 
         public bool Single => !Multiple;
 
+        #endregion
+
+        #region Methods
+
+        public void AddItem(IMenuItem item)
+        {
+            Items.Add(item);
+            NotifyOfPropertyChange(() => Items);
+            NotifyOfPropertyChange(() => IsVisible);
+        }
+
         public void MenuSelectionChanged(object value, ItemClickEventArgs args)
         {
-            var dashboard = args.ClickedItem as IMenuItem;
-            if (dashboard != null)
+            var item = args.ClickedItem as IMenuItem;
+            if (item != null)
             {
-                _onClick?.Invoke(dashboard);
+                _onClick?.Invoke(item);
                 IsOpen = false;
             }
         }
 
         public void OptionMenuSelectionChanged(object value, ItemClickEventArgs args)
         {
-            _manager.Add(null);
+            var iconItem = args.ClickedItem as HamburgerMenuIconItem;
+            if (iconItem != null)
+            {
+                var optionItem = iconItem.Tag as IMenuItem;
+                if (optionItem != null)
+                {
+                    optionItem.OnClick?.Invoke();
+                }
+            }
+
             args.Handled = true;
         }
+
+        #endregion
     }
 }

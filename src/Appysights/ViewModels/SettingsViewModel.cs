@@ -70,12 +70,8 @@ namespace Appysights.ViewModels
 
         #region Methods
 
-        public void AddConfig()
+        public void EditConfigurations()
         {
-            _configurationManager.Add(() => 
-            {
-                _eventAggregator.PublishOnUIThreadAsync(ConfigChangedMessage.Default);
-            });
         }
 
         public void Random()

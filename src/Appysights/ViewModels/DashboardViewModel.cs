@@ -54,7 +54,6 @@ namespace Appysights.ViewModels
             MicroServices = new ObservableCollection<MicroServiceViewModel>();
         }
 
-
         #endregion
 
         #region Properties
@@ -83,6 +82,8 @@ namespace Appysights.ViewModels
         public string Title => _configuration.Name;
 
         public object Icon => string.IsNullOrEmpty(_configuration.Icon) ? BuildDefaultIcon() : BuildIcon(_configuration.Icon);
+
+        public System.Action OnClick => () => { };
 
         #endregion
 
