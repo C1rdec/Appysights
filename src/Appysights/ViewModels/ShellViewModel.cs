@@ -57,8 +57,10 @@ namespace Appysights.ViewModels
                 new MenuItem("New", "ShapeSquareRoundedPlus", AddNewConfiguration),
                 new MenuItem("Settings", "CogOutline", () => ShowSettings()),
             };
+
             Menu = new HamburgerSelectorViewModel(viewModels, options, OnMenuClick);
             Menu.PropertyChanged += Menu_PropertyChanged;
+
             if (viewModels.Any())
             {
                 var first = viewModels.FirstOrDefault();
@@ -182,6 +184,15 @@ namespace Appysights.ViewModels
 
         public bool MenuVisible => Menu.IsVisible;
 
+        public string Version
+        {
+            get
+            {
+                var version = Assembly.GetExecutingAssembly().GetName().Version;
+                return $"{version.Major}.{version.Minor}.{version.Build}";
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -207,15 +218,6 @@ namespace Appysights.ViewModels
             CurrentView = IoC.Get<SplashScreenViewModel>();
             NotifyOfPropertyChange(() => CurrentView);
             await _dialogService.ShowProgressAsync("Updating...", "Appysights will restart", UpdateCore());
-        }
-
-        public string Version
-        {
-            get
-            {
-                var version = Assembly.GetExecutingAssembly().GetName().Version;
-                return $"{version.Major}.{version.Minor}.{version.Build}";
-            }
         }
 
         public void CloseFlyout()
@@ -291,17 +293,22 @@ namespace Appysights.ViewModels
             }
 
             CurrentView = t;
-            
-
             NotifyOfPropertyChange(() => CurrentView);
         }
 
         private void OnNewConfiguration()
         {
+            if (_manager.Configurations.Any())
+            {
+                return;
+            }
+
             var firstConfig = _manager.Configurations.FirstOrDefault();
             if (firstConfig != null)
             {
-                CurrentView = new DashboardViewModel(firstConfig.Entity);
+                var viewModel = new DashboardViewModel(firstConfig.Entity);
+                viewModel.Initialize();
+                CurrentView = viewModel;
                 NotifyOfPropertyChange(() => CurrentView);
             }
         }

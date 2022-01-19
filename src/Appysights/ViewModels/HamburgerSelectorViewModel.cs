@@ -14,6 +14,7 @@ namespace Appysights.ViewModels
 
         private Action<IMenuItem> _onClick;
         private bool _isOpen;
+        private int _index;
 
         #endregion
 
@@ -58,6 +59,20 @@ namespace Appysights.ViewModels
 
         public bool Single => !Multiple;
 
+        public int Index
+        {
+            get
+            {
+                return _index;
+            }
+
+            set
+            {
+                _index = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -65,6 +80,7 @@ namespace Appysights.ViewModels
         public void AddItem(IMenuItem item)
         {
             Items.Add(item);
+            Index = Items.Count - 1;
             NotifyOfPropertyChange(() => Items);
             NotifyOfPropertyChange(() => IsVisible);
         }

@@ -56,45 +56,18 @@
             </DataTemplate>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid>
-        <Controls:HamburgerMenu
-           IsPaneOpen="{Binding IsOpen}"
-            SelectedIndex="0"
-           Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
-           x:Name="Menu" 
-           DisplayMode="CompactOverlay" 
-           SelectedItem="{Binding SelectedItem, Converter={StaticResource SelectedItemConverter}}"
-           cal:Message.Attach="[Event ItemClick]=[Action MenuSelectionChanged($source, $eventArgs)]; [Event OptionsItemClickEvent]=[Action OptionMenuSelectionChanged($source, $eventArgs)]"
-           ItemsSource="{Binding Items, Converter={StaticResource HamuburgerMenuItemConverter}}"
-           OptionsItemsSource="{Binding OptionItems, Converter={StaticResource HamuburgerMenuItemConverter}}"
-           HamburgerMenuHeaderTemplate="{StaticResource MenuHeaderTemplate}"
-           ItemTemplate="{StaticResource MenuItemTemplate}"
-            OptionsItemTemplate="{StaticResource HamburgerOptionsMenuItem}">
-
-            <!--<mah:HamburgerMenu.Content>
-                <ContentControl x:Name="SelectedItem" />
-            </mah:HamburgerMenu.Content>-->
-            <!--<Controls:HamburgerMenu.OptionsItemsSource>
-                <Controls:HamburgerMenuItemCollection>
-
-                    <Controls:HamburgerMenuIconItem Label="About">
-                        <Controls:HamburgerMenuIconItem.Icon>
-                            <iconPacks:PackIconBoxIcons Kind="LogosApple" />
-                        </Controls:HamburgerMenuIconItem.Icon>
-                        <Controls:HamburgerMenuIconItem.Tag>
-                            <TextBlock HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       FontSize="28"
-                       FontWeight="Bold">
-                About
-                            </TextBlock>
-                        </Controls:HamburgerMenuIconItem.Tag>
-                    </Controls:HamburgerMenuIconItem>
-
-                </Controls:HamburgerMenuItemCollection>
-            </Controls:HamburgerMenu.OptionsItemsSource>-->
-
-        </Controls:HamburgerMenu>
-        <Grid Width="50"></Grid>
-    </Grid>
+    <Controls:HamburgerMenu
+        IsPaneOpen="{Binding IsOpen}"
+        SelectedIndex="{Binding Index}"
+        Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+        x:Name="Menu" 
+        DisplayMode="CompactOverlay" 
+        SelectedItem="{Binding SelectedItem, Converter={StaticResource SelectedItemConverter}}"
+        cal:Message.Attach="[Event ItemClick]=[Action MenuSelectionChanged($source, $eventArgs)]; [Event OptionsItemClickEvent]=[Action OptionMenuSelectionChanged($source, $eventArgs)]"
+        ItemsSource="{Binding Items, Converter={StaticResource HamuburgerMenuItemConverter}}"
+        OptionsItemsSource="{Binding OptionItems, Converter={StaticResource HamuburgerMenuItemConverter}}"
+        HamburgerMenuHeaderTemplate="{StaticResource MenuHeaderTemplate}"
+        ItemTemplate="{StaticResource MenuItemTemplate}"
+        OptionsItemTemplate="{StaticResource HamburgerOptionsMenuItem}">
+    </Controls:HamburgerMenu>
 </UserControl>
