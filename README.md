@@ -10,7 +10,7 @@ Just a simple [Configuration File](CONFIGURATION.md) is needed and you are ready
  
 ## Usage
 - Install ≥ [.NET 6](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
-- Download and run [`AppysightsSetup.exe`](https://github.com/C1rdec/Appysights/releases/latest/download/AppysightsSetup.exe)
+- Download and run [`AppysightsSetup.exe`](https://github.com/C1rdec/Appysights/releases/latest/download/AppysightsSetup.zip)
      - You will get some warnings since the Setup is not sign yet
 - Import your [Configuration File](CONFIGURATION.md)
 <br/>
