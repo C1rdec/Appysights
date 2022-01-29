@@ -57,7 +57,6 @@
                         </Setter>
                     </Style>
                 </ResourceDictionary>
-
                 <ResourceDictionary>
                     <Color x:Key="Colors.Error">#f44336</Color>
                     <Color x:Key="Colors.HighLight">#1565C0</Color>

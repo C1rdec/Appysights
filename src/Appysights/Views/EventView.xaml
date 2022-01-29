@@ -3,18 +3,40 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-            xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid KeyboardNavigation.TabNavigation="None">
+        <Popup IsOpen="{Binding IsCopiedOpen}" Placement="Mouse" PopupAnimation="Fade" AllowsTransparency="True">
+            <Border CornerRadius="4" Background="{DynamicResource MahApps.Brushes.Accent}">
+                <TextBlock Margin="4">Copied!</TextBlock>
+            </Border>
+        </Popup>
         <StackPanel VerticalAlignment="Center" Margin="8,0,8,0">
             <TextBlock x:Name="Title" FontSize="18" FontWeight="Light" Margin="0,0,0,0"/>
-            <TextBlock x:Name="ActionName"
-                       FontSize="12"
-                       HorizontalAlignment="Center"
-                       FontWeight="Light"
-                       Foreground="DarkGray"
-                       Margin="0,0,0,15"/>
+
+            <Border HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,15" CornerRadius="5" cal:Message.Attach="[Event MouseDown] = [Action OnActionClick()]">
+                <TextBlock x:Name="ActionName"
+                           Margin="4,3,4,3"
+                           FontSize="12"
+                           FontWeight="Light"
+                           Cursor="Hand"
+                           Foreground="DarkGray"/>
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <SolidColorBrush Color="White" Opacity="0.15"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+            </Border>
             <TextBox x:Name="Description" 
                      AcceptsReturn="True" 
                      IsReadOnly="True" 
