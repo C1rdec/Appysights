@@ -7,7 +7,6 @@ namespace Appysights.Services
     public class ConfigurationManager : AppdataServiceBase<object>
     {
         public static string ConfigurationFolderName = "Configurations";
-        public static string OldConfigurationName = "Services.json";
 
         private List<ConfigurationService> _configurations;
 
@@ -35,8 +34,6 @@ namespace Appysights.Services
                 Directory.CreateDirectory(configFolderPath);
             }
 
-            HandleMigration();
-
             var files = Directory.GetFiles(Path.Combine(FolderPath, ConfigurationFolderName));
             foreach (var file in files)
             {
@@ -58,20 +55,6 @@ namespace Appysights.Services
             _configurations.Add(config);
             NewConfiguration?.Invoke(this, config);
             onSuccess?.Invoke();
-        }
-
-        private void HandleMigration()
-        {
-            var oldFilePath = Path.Combine(FolderPath, OldConfigurationName);
-            if (File.Exists(oldFilePath))
-            {
-                var oldConfig = new ConfigurationService(oldFilePath);
-                oldConfig.Initialize();
-                oldConfig.Entity.Name = "Micro Services";
-                oldConfig.Entity.Icon = "Git";
-                oldConfig.Save();
-                File.Delete(oldFilePath);
-            }
         }
 
         #endregion
