@@ -38,6 +38,7 @@
                 </Border.Style>
             </Border>
             <TextBox x:Name="Description" 
+                     MaxHeight="300"
                      AcceptsReturn="True" 
                      IsReadOnly="True" 
                      Controls:TextBoxHelper.SelectAllOnFocus="True" 
