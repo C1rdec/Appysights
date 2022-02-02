@@ -13,6 +13,7 @@
                       xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
                       Dialog:DialogParticipation.Register="{Binding}"
                       MinWidth="840" MinHeight="500"
+                      TitleBarHeight="38"
                       Height="450" Width="800">
     <Controls:MetroWindow.Resources>
         <SolidColorBrush x:Key="StandardBorderBrush" Color="#888" />
@@ -243,6 +244,6 @@
         <!--This Grid is to set the Flyout Width-->
         <Grid x:Name="FlyoutWidth"/>
         <ContentControl x:Name="CurrentView" Margin="48,0,0,0" Grid.ColumnSpan="2"/>
-        <ContentControl x:Name="Menu" Margin="0,-30,0,0"/>
+        <ContentControl x:Name="Menu" Margin="0,-38,0,0"/>
     </Grid>
 </Controls:MetroWindow>
