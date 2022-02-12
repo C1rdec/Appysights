@@ -3,7 +3,7 @@ using Appysights.Models;
 
 namespace Appysights.Services
 {
-    public class SettingsService: AppdataServiceBase<Settings>
+    public class SettingsService: AppysightFileBase<Settings>
     {
         #region Properties
 

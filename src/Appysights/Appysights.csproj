@@ -28,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AppDataFileManager" Version="1.0.1" />
     <PackageReference Include="BusyIndicator" Version="1.9.0" />
     <PackageReference Include="Caliburn.Micro" Version="4.0.173" />
     <PackageReference Include="Clowd.Squirrel" Version="2.7.34-pre" />

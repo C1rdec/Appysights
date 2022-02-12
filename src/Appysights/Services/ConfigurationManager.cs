@@ -4,7 +4,7 @@ using System.IO;
 
 namespace Appysights.Services
 {
-    public class ConfigurationManager : AppdataServiceBase<object>
+    public class ConfigurationManager : AppysightFileBase<object>
     {
         public static string ConfigurationFolderName = "Configurations";
 

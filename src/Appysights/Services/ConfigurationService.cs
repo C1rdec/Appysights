@@ -2,7 +2,7 @@
 
 namespace Appysights.Services
 {
-    public class ConfigurationService : AppdataServiceBase<Configuration>
+    public class ConfigurationService : AppysightFileBase<Configuration>
     {
         #region Fields
 
