@@ -41,7 +41,7 @@
                      MaxHeight="300"
                      AcceptsReturn="True" 
                      IsReadOnly="True" 
-                     Controls:TextBoxHelper.SelectAllOnFocus="True" 
+                     Controls:TextBoxHelper.SelectAllOnFocus="True"
                      TextWrapping="Wrap"/>
         </StackPanel>
         <TextBlock x:Name="Id" 

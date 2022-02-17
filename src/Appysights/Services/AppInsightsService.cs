@@ -174,9 +174,15 @@ namespace Appysights.Services
             if (_events.Any(e => e.Id == appInsightEvent.Id))
             {
                 return;
-            }   
+            }
 
-            this._events.Add(appInsightEvent);
+            var eventCount = _events.Count;
+            if (eventCount >= Top)
+            {
+                _events.RemoveAt(eventCount -1);
+            }
+
+            _events.Add(appInsightEvent);
             NewEvent?.Invoke(this, appInsightEvent);
             _debounceService.Debounce(300, () =>
             {
