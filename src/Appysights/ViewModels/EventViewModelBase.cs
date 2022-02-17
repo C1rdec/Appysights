@@ -60,6 +60,16 @@ namespace Appysights.ViewModels
 
         public string ActionName { get; set; }
 
+        public bool IsLessThen3Hours
+        {
+            get
+            {
+                var maximumDate = System.DateTime.Now.AddHours(-3);
+                var result = System.DateTime.Compare(maximumDate, AppEvent.LocalDate);
+                return result > 0 ? false : true;
+            }
+        }
+
         protected AppInsightEvent AppEvent { get; private set; }
 
         private string FormatActionName(CustomDimensions customDimensions)

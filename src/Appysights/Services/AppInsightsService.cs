@@ -66,6 +66,8 @@ namespace Appysights.Services
 
         public event EventHandler<AppInsightEvent> NewEvent;
 
+        public event EventHandler<AppInsightEvent> DeleteEvent;
+
         public event EventHandler Cleared;
 
         public event EventHandler<bool> BusyChanged;
@@ -176,10 +178,11 @@ namespace Appysights.Services
                 return;
             }
 
-            var eventCount = _events.Count;
-            if (eventCount >= Top)
+            if (_events.Count >= Top)
             {
-                _events.RemoveAt(eventCount -1);
+                var firstEvent = _events.First();
+                _events.Remove(firstEvent);
+                DeleteEvent?.Invoke(this, firstEvent);
             }
 
             _events.Add(appInsightEvent);

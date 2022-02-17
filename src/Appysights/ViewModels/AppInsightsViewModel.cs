@@ -43,6 +43,7 @@ namespace Appysights.ViewModels
             else
             {
                 _service.NewEvent += Service_NewEvent;
+                _service.DeleteEvent += Service_DeleteEvent;
                 _currentEvents = _service.Events;
                 DisplayNextPage();
             }
@@ -54,6 +55,7 @@ namespace Appysights.ViewModels
             {
                 IsBusy = false;
                 _service.NewEvent += Service_NewEvent;
+                _service.DeleteEvent += Service_DeleteEvent;
                 _currentEvents = _service.Events;
                 Execute.OnUIThread(() => DisplayNextPage());
             }
@@ -198,6 +200,7 @@ namespace Appysights.ViewModels
         public void Dispose()
         {
             _service.NewEvent -= Service_NewEvent;
+            _service.DeleteEvent -= Service_DeleteEvent;
             _service.BusyChanged -= Service_BusyChanged;
         }
 
@@ -217,6 +220,20 @@ namespace Appysights.ViewModels
             }
 
             Events.Insert(0, new EventTileViewModel(e, _position, RemoveEvent));
+        }
+
+        private void Service_DeleteEvent(object sender, AppInsightEvent e)
+        {
+            if (RequestMode)
+            {
+                return;
+            }
+
+            var viewModel = Events.FirstOrDefault(e => e.Id == e.Id);
+            if (viewModel != null)
+            {
+                Events.Remove(viewModel);
+            }
         }
 
         private void DisplayNextPage()
