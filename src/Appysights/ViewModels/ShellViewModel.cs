@@ -49,7 +49,8 @@ namespace Appysights.ViewModels
 
             _flyoutService.ShowFlyoutRequested += FlyoutService_ShowFlyout;
             _flyoutService.CloseFlyoutRequested += FlyoutService_CloseFlyout;
-            _manager.NewConfiguration += Manager_NewConfiguration;
+            _manager.AddedConfiguration += Manager_NewConfiguration;
+            _manager.RemovedConfiguration += Manager_RemovedConfiguration;
 
             var viewModels = manager.Configurations.Select(c => new DashboardViewModel(c.Entity));
             var options = new List<IMenuItem>()
@@ -79,6 +80,11 @@ namespace Appysights.ViewModels
         private void Manager_NewConfiguration(object sender, ConfigurationService e)
         {
             Menu.AddItem(new DashboardViewModel(e.Entity));
+        }
+
+        private void Manager_RemovedConfiguration(object sender, ConfigurationService e)
+        {
+            Menu.RemoveItem(e.Entity.Name);
         }
 
         private void AddNewConfiguration()

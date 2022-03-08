@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Appysights.Services
 {
@@ -15,8 +16,9 @@ namespace Appysights.Services
             _configurations = new List<ConfigurationService>();
         }
 
-        public event EventHandler<ConfigurationService> NewConfiguration;
+        public event EventHandler<ConfigurationService> AddedConfiguration;
 
+        public event EventHandler<ConfigurationService> RemovedConfiguration;
 
         public IEnumerable<ConfigurationService> Configurations => _configurations;
 
@@ -52,8 +54,15 @@ namespace Appysights.Services
 
         private void OnSuccess(Action onSuccess, ConfigurationService config)
         {
+            var existingConfiguration = _configurations.FirstOrDefault(c => c.Entity.Name == config.Entity.Name);
+            if (existingConfiguration != null)
+            {
+                _configurations.Remove(existingConfiguration);
+                RemovedConfiguration?.Invoke(this, config);
+            }
+
             _configurations.Add(config);
-            NewConfiguration?.Invoke(this, config);
+            AddedConfiguration?.Invoke(this, config);
             onSuccess?.Invoke();
         }
 

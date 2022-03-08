@@ -85,6 +85,17 @@ namespace Appysights.ViewModels
             NotifyOfPropertyChange(() => IsVisible);
         }
 
+        public void RemoveItem(string title)
+        {
+            var itemToRemove = Items.FirstOrDefault(i => i.Title == title);
+            if (itemToRemove != null)
+            {
+                Items.Remove(itemToRemove);
+                NotifyOfPropertyChange(() => Items);
+                NotifyOfPropertyChange(() => IsVisible);
+            }
+        }
+
         public void MenuSelectionChanged(object value, ItemClickEventArgs args)
         {
             var item = args.ClickedItem as IMenuItem;
