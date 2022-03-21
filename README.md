@@ -6,7 +6,7 @@ Just a simple [Configuration File](CONFIGURATION.md) is needed and you are ready
  # Shoutouts
 | [Winook](https://github.com/macote/Winook) for the thread level hook | [MahApps](https://github.com/MahApps/MahApps.Metro) for the modern UI |
 | ------------- | ------------- |
-| <a href="https://github.com/macote/Winook" target="_blank"><img height="50" src="./src/Appysights/Assets/WinookLogo.png"></a> | <a href="https://github.com/MahApps/MahApps.Metro" target="_blank"><img height="45" src="./src/Appysights/Assets/MahAppsIcon.png"></a> |
+| <a href="https://github.com/macote/Winook" target="_blank"><img height="50" src="https://raw.githubusercontent.com/macote/Winook/master/doc/Winook.svg"></a> | <a href="https://github.com/MahApps/MahApps.Metro" target="_blank"><img height="45" src="./src/Appysights/Assets/MahAppsIcon.png"></a> |
  
 ## Usage
 - Install ≥ [.NET 6](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
