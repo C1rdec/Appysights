@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Appysights.Services;
 using Caliburn.Micro;
@@ -11,6 +12,7 @@ namespace Appysights.ViewModels
         #region Fields
 
         private bool _selected;
+        private double _cpuPercentage;
         private bool _hasEvents;
         private MicroService _service;
         private Action<MicroServiceViewModel> _callback;
@@ -35,13 +37,11 @@ namespace Appysights.ViewModels
 
             Applications = viewModels;
             HasEvents = Applications.Any(a => a.ErrorCount > 0);
-        }
 
-        private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "ErrorCountValue")
+            var cpuMonitoring = microService.Applications.FirstOrDefault(a => a.MonitoringCpu);
+            if (cpuMonitoring != null)
             {
-                HasEvents = Applications.Any(a => a.ErrorCount > 0);
+                cpuMonitoring.CpuPourcentageChanged += CpuMonitoring_CpuPourcentageChanged;
             }
         }
 
@@ -54,6 +54,20 @@ namespace Appysights.ViewModels
         public IEnumerable<SimpleAppInsightsViewModel> Applications { get; set; }
 
         public MicroService Service => _service;
+
+        public double CpuPercentage
+        {
+            get
+            {
+                return _cpuPercentage;
+            }
+
+            set
+            {
+                _cpuPercentage = value;
+                NotifyOfPropertyChange(() => CpuPercentage);
+            }
+        }
 
         public bool Selected
         {
@@ -113,6 +127,17 @@ namespace Appysights.ViewModels
             {
                 application.PropertyChanged -= this.ViewModel_PropertyChanged;
                 application.Dispose();
+            }
+        }
+
+        private void CpuMonitoring_CpuPourcentageChanged(object sender, double e)
+            => CpuPercentage = e;
+
+        private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "ErrorCountValue")
+            {
+                HasEvents = Applications.Any(a => a.ErrorCount > 0);
             }
         }
 

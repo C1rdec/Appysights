@@ -57,6 +57,7 @@ namespace Appysights.Services
             }
 
             var response = await _client.SendAsync(request);
+
             return await response.Content.ReadAsStringAsync();
         }
 

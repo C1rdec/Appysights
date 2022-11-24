@@ -7,16 +7,14 @@ using Appysights.Models;
 
 namespace Appysights.Services
 {
-    public class EventPipeline<T> : HttpServiceBase
+    public class EventPipeline<T> : PipelineBase
         where T : AppInsightEvent
     {
         #region Fields
 
-        private string _apiKey;
         private string _urlBase;
         private Action<T> _callback;
         private T _lastEvent;
-        private Dictionary<string, string> _header;
         private readonly string _variableCharacter;
 
         #endregion
@@ -24,16 +22,11 @@ namespace Appysights.Services
         #region Constructors
 
         public EventPipeline(string url, Action<T> callback, string apiKey)
+            : base (apiKey)
         {
             _urlBase = url;
             _variableCharacter = _urlBase.Contains('?') ? "&" : "?";
             _callback = callback;
-            _apiKey = apiKey;
-
-            _header = new Dictionary<string, string>
-            {
-                { "X-Api-Key", _apiKey }
-            };
         }
 
         #endregion
@@ -46,7 +39,7 @@ namespace Appysights.Services
 
         private async Task GetEvents(string url)
         {
-            var text = await GetText(url, _header);
+            var text = await GetText(url, Headers);
             var response = JsonHelper.Deserialize<AzureResponse<T>>(text);
             HandleEvents(response.Value);
         }

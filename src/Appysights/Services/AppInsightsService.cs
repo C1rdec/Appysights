@@ -15,6 +15,7 @@ namespace Appysights.Services
         private CancellationTokenSource _tokenSource;
         private bool _watching;
         private bool _isBusy;
+        private double _cpuPourcentage;
         private List<AppInsightEvent> _events;
         private AppInsightsConfiguration _configuration;
         private DebounceService _debounceService;
@@ -36,6 +37,10 @@ namespace Appysights.Services
 
         public string Name => _configuration.Name;
 
+        public double CpuPourcentage => _cpuPourcentage;
+
+        public bool MonitoringCpu => _configuration.MonitorCpu;
+
         public bool IsBusy => _isBusy;
 
         public IEnumerable<AppInsightEvent> Events => _events.OrderByDescending(e => e.Timestamp);
@@ -47,6 +52,8 @@ namespace Appysights.Services
         private string BaseUrl => $"https://api.applicationinsights.io/v1/apps/{ApplicationId}";
 
         private string MetricsUrl => $"{BaseUrl}/metrics";
+
+        private string CpuPercentageUrl => $"{MetricsUrl}/performanceCounters/processCpuPercentage";
 
         private string EventsUrl => $"{BaseUrl}/events";
 
@@ -72,6 +79,8 @@ namespace Appysights.Services
 
         public event EventHandler<bool> BusyChanged;
 
+        public event EventHandler<double> CpuPourcentageChanged;
+
         #endregion
 
         #region Methods
@@ -84,6 +93,7 @@ namespace Appysights.Services
             }
 
             _watching = true;
+            using var requestCountPipeline = new MetricPipeline(CpuPercentageUrl, NewCpuPercentage, ApiKey);
             using var exceptionPipeline = new EventPipeline<ExceptionEvent>(ExceptionsUrl, NewEventAction, ApiKey);
 
             _tokenSource = new CancellationTokenSource();
@@ -99,6 +109,10 @@ namespace Appysights.Services
                 }
 
                 tasks.Add(Task.Delay(5000));
+                if (_configuration.MonitorCpu)
+                {
+                    tasks.Add(requestCountPipeline.GetPourcentage());
+                }
 
                 if (!initialize)
                 {
@@ -191,6 +205,12 @@ namespace Appysights.Services
             {
                 CountChanged?.Invoke(this, _events.Count());
             });
+        }
+
+        private void NewCpuPercentage(CpuUsageMetric metric)
+        {
+            _cpuPourcentage = metric.CpuPercentage.Average;
+            CpuPourcentageChanged?.Invoke(this, _cpuPourcentage);
         }
 
         private async Task<IEnumerable<T>> GetTodayAsync<T>()

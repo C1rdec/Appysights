@@ -10,6 +10,8 @@
 
         public string ApiKey { get; set; }
 
+        public bool MonitorCpu { get; set; }
+
         #endregion
     }
 }
