@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Appysights.Services;
 using Caliburn.Micro;
@@ -59,7 +58,7 @@ namespace Appysights.ViewModels
         {
             get
             {
-                return _cpuPercentage;
+                return _cpuPercentage * 3;
             }
 
             set

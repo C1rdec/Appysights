@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Navigation;
 using Appysights.Models;
 
 namespace Appysights.Services
@@ -209,6 +210,11 @@ namespace Appysights.Services
 
         private void NewCpuPercentage(CpuUsageMetric metric)
         {
+            if (metric == null)
+            {
+                return;
+            }
+
             _cpuPourcentage = metric.CpuPercentage.Average;
             CpuPourcentageChanged?.Invoke(this, _cpuPourcentage);
         }
