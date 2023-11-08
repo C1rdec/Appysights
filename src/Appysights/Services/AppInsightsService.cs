@@ -128,7 +128,7 @@ namespace Appysights.Services
 
                 try
                 {
-                    await Task.WhenAll(tasks);
+                    await Task.WhenAll(tasks).ConfigureAwait(false);
                     tasks.Clear();
                 }
                 catch (Exception)
