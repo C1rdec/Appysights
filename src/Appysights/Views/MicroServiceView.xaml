@@ -34,7 +34,7 @@
                                        Opacity="0.4"
                                        Value="{Binding CpuPercentage}" 
                                        Height="{Binding ActualHeight, ElementName=Main}" />
-            <TextBlock x:Name="ServiceName" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18" FontWeight="Medium">
+            <TextBlock x:Name="ServiceName" ToolTip="{Binding ServiceName}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18" FontWeight="Medium">
                 <TextBlock.Style>
                     <Style TargetType="TextBlock">
                         <Style.Triggers>
